@@ -23,8 +23,8 @@ namespace DataBase.Repositories
         public ICollection<Inventory> GetInventoriesWithUser(int id)
         {
             List<PpUser> user = PlutoContext.PpUser
-                .Where(u => u.Email.Equals("mail@mail.dk"))
-                .Include(u => u.Inventories.Where(i => i.Type.Equals("Fridge")))
+                .Where(u => u.PpUserId.Equals(id))
+                .Include(u => u.Inventories)
                 .ThenInclude(i => i.ItemCollection)
                 .ThenInclude(i=>i.Item)
                 .ToList();

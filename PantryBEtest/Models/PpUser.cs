@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DataBase
 {
@@ -9,5 +10,6 @@ namespace DataBase
         public string Name { get; set; }
         public string PasswordHash { get; set; }
         public ICollection<Inventory> Inventories { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

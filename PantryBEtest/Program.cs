@@ -10,7 +10,7 @@ namespace DataBase
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Welcome to Passion Pantry Backend Server");
 
             using (var context = new MyDbContext())
             {
@@ -21,12 +21,19 @@ namespace DataBase
                     var inventories = UOW.Users.GetInventoriesWithUser(1);
                     var fridge = inventories.SingleOrDefault(i => i.Type.Equals("Fridge"));
 
-                    
+                    Console.WriteLine("Indhold i køleskab: ");
                     foreach (var item in fridge.ItemCollection)
                     {
-                        Console.WriteLine(item.Item.Name);
-                        Console.WriteLine(item.Amount);
+                        Console.WriteLine(item.Item.Name+ ": "+ item.Amount);
                     }
+
+                    Console.WriteLine("Indtast bruger ID:");
+                    var input = Console.ReadLine();
+                    PpUser user = UOW.Users.Get(int.Parse(input));
+                    Console.WriteLine("Name: "+user.Name+" Type new Name: ");
+                    input = Console.ReadLine();
+                    user.Name = input;
+                    UOW.Complete();
                 }
 
                 //XmlSerializer x = new XmlSerializer(typeof(List<IItem>));
