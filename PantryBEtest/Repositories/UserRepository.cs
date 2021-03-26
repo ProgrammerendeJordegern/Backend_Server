@@ -7,7 +7,8 @@ namespace DataBase.Repositories
 {
     public interface IUserRepository : IRepository<PpUser>
     {
-        ICollection<Inventory> GetInventoriesWithUser(int id);
+        public ICollection<Inventory> GetInventoriesWithUser(int id);
+        public PpUser GetUserWithEmail(string email);
     }
     public class UserRepository : Repository<PpUser>, IUserRepository
     {
@@ -29,6 +30,12 @@ namespace DataBase.Repositories
                 .ThenInclude(i=>i.Item)
                 .ToList();
             return user[0].Inventories;
+        }
+        public PpUser GetUserWithEmail(string email)
+        {
+            PpUser user = PlutoContext.PpUser
+                .SingleOrDefault(u => u.Email.Equals(email));
+            return user;
         }
     }
 }

@@ -34,6 +34,8 @@ namespace DataBase
                     input = Console.ReadLine();
                     user.Name = input;
                     UOW.Complete();
+                    PpUser u2 = UOW.Users.GetUserWithEmail("mail@mail.dk");
+                    Console.WriteLine(u2.PasswordHash);
                 }
 
                 //XmlSerializer x = new XmlSerializer(typeof(List<IItem>));
