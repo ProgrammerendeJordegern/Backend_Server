@@ -6,7 +6,11 @@ namespace DataBase
     public class Inventory
     {
         public int InventoryId { get; set; }
-        public string Type { get; set; }
+       // public string Type { get; set; }
         public ICollection<InventoryItem> ItemCollection { get; set; }
     }
+    public class Fridge : Inventory { }
+    public class Freezer : Inventory { }
+    public class Pantry : Inventory { }
+    public class ShoppingList : Inventory { }
 }
