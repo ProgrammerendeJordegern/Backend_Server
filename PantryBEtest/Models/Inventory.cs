@@ -3,7 +3,7 @@ using DataBase.Models;
 
 namespace DataBase
 {
-    public class Inventory
+    public abstract class Inventory
     {
         public int InventoryId { get; set; }
        // public string Type { get; set; }
