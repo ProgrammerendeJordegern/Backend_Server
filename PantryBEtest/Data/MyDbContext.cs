@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -8,14 +9,24 @@ namespace DataBase.Data
 {
     public class MyDbContext : DbContext
     {
-        //public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
+        private string _connectionString;
+        public MyDbContext()
+        {
+            _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+        }
+
+        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
+        {
+            _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PpTest;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.LogTo(Console.WriteLine, new[] { RelationalEventId.CommandExecuted })
                 .EnableSensitiveDataLogging();
-            optionsBuilder.UseSqlServer(
-                @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            optionsBuilder.UseSqlServer();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
