@@ -31,7 +31,7 @@ namespace DataBase.Repositories
                 .ThenInclude(i => i.ItemCollection)
                 .ThenInclude(i=>i.Item)
                 .ToList();
-            if (user[0] != null) return user[0].Inventories;
+            if (user.Count>0) return user[0].Inventories;
             return null;
         }
         public PpUser GetUserWithEmail(string email)
