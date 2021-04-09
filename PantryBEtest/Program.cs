@@ -36,7 +36,7 @@ namespace DataBase
                     var inventories = UOW.Users.GetInventoriesWithUser(23);
                     if (inventories != null) { 
                         var fridge = inventories.SingleOrDefault(i => i.GetType() == typeof(Fridge));
-                        Console.WriteLine(inventories.ElementAt(0).GetType());
+                        Console.WriteLine(inventories.ElementAt(1).GetType());
                         //Print content in fridge
                         Console.WriteLine("Indhold i køleskab: ");
                         foreach (var item in fridge.ItemCollection)

@@ -80,6 +80,9 @@ namespace DataBase.Data
         public DbSet<Item> Item { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
         public DbSet<Fridge> Fridge { get; set; }
+        public DbSet<Freezer> Freezer { get; set; }
+        public DbSet<Pantry> Pantry { get; set; }
+        public DbSet<ShoppingList> ShoppingList { get; set; }
         public DbSet<InventoryItem> InventoryItem { get; set; }
 
     }
