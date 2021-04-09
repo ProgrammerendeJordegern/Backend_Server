@@ -10,7 +10,7 @@ namespace DataBase
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Passion Pantry Backend Server");
+            Console.WriteLine("Welcome to Pantry Passion Backend Server");
 
             using (var context = new MyDbContext())
             {
@@ -20,13 +20,14 @@ namespace DataBase
                 {
                     var inventories = UOW.Users.GetInventoriesWithUser(1);
                     var fridge = inventories.SingleOrDefault(i => i.Type.Equals("Fridge"));
-
+                    //Print content in fridge
                     Console.WriteLine("Indhold i køleskab: ");
                     foreach (var item in fridge.ItemCollection)
                     {
                         Console.WriteLine(item.Item.Name+ ": "+ item.Amount);
                     }
 
+                    //Search for user and change name
                     Console.WriteLine("Indtast bruger ID:");
                     var input = Console.ReadLine();
                     PpUser user = UOW.Users.Get(int.Parse(input));

@@ -10,6 +10,7 @@ namespace DataBase
         public  int ItemId { get; set; }
 
         //public List<string> EanCollection { get; set; }//Flere varenumre kan være en del af et Item fx. Kærgåden og Bakkedal smørbar
+        public string Ean { get; set; }
         public  string Name { get; set; }
         public ICollection<InventoryItem> InventoryCollection { get; set; } //En vare kan eksistere på flere lister (Fx smør i fryser og køleskab)
 
