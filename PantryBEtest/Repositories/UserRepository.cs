@@ -10,6 +10,8 @@ namespace DataBase.Repositories
         public ICollection<Inventory> GetInventoriesWithUser(int id);
         public PpUser GetUserWithEmail(string email);
     }
+
+
     public class UserRepository : Repository<PpUser>, IUserRepository
     {
         public UserRepository(MyDbContext context) : base(context)
@@ -29,7 +31,8 @@ namespace DataBase.Repositories
                 .ThenInclude(i => i.ItemCollection)
                 .ThenInclude(i=>i.Item)
                 .ToList();
-            return user[0].Inventories;
+            if (user[0] != null) return user[0].Inventories;
+            return null;
         }
         public PpUser GetUserWithEmail(string email)
         {
