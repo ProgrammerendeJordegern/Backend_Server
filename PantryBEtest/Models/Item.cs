@@ -19,4 +19,12 @@ namespace DataBase
         public uint DesiredMinimumAmount { get; set; } //Nødvendig for at genere indkøbslite
 
     }
+
+    public class GlobalItem
+    {
+        public int ItemId { get; set; }
+        public string Ean { get; set; }
+        public string Name { get; set; }
+
+    }
 }

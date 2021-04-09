@@ -9,7 +9,7 @@ namespace DataBase.Data
 {
     public class MyDbContext : DbContext
     {
-        private string _connectionString;
+        private readonly string _connectionString;
         public MyDbContext()
         {
             _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
@@ -26,7 +26,7 @@ namespace DataBase.Data
         {
             optionsBuilder.LogTo(Console.WriteLine, new[] { RelationalEventId.CommandExecuted })
                 .EnableSensitiveDataLogging();
-            optionsBuilder.UseSqlServer();
+            optionsBuilder.UseSqlServer(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

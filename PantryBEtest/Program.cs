@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataBase
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -22,7 +22,7 @@ namespace DataBase
                     if (user == null)
                     {
                         Console.WriteLine("Adding Dummydata...");
-                        AddDummyData();
+                        AddDummyData(context);
                         Console.WriteLine("\n\nDummydata Added");
                     }
                 }
@@ -69,9 +69,9 @@ namespace DataBase
             }
         }
 
-        public static void AddDummyData()
+        public static void AddDummyData(MyDbContext dbc)
             {
-                using (var context = new MyDbContext())
+                using (dbc )
                 {
                     var i1 = new Item() {Name = "Smør", InventoryCollection = new List<InventoryItem>(),Ean = "123123"};
                     var i2 = new Item() {Name = "Mælk", InventoryCollection = new List<InventoryItem>()};
@@ -88,12 +88,12 @@ namespace DataBase
                     
                     var ii3 = new InventoryItem() { Amount = 1, Inventory = inventory1, Item = i3 };
                     
-                    var ii4 = new InventoryItem() { Amount = 8, Inventory = inventory3, Item = i4 }; 
-                   
-                    context.InventoryItem.Add(ii4);
-                    context.InventoryItem.Add(ii1);
-                    context.InventoryItem.Add(ii2);
-                    context.InventoryItem.Add(ii3);
+                    var ii4 = new InventoryItem() { Amount = 8, Inventory = inventory3, Item = i4 };
+
+                    dbc.InventoryItem.Add(ii4);
+                    dbc.InventoryItem.Add(ii1);
+                    dbc.InventoryItem.Add(ii2);
+                    dbc.InventoryItem.Add(ii3);
 
                 
 
@@ -110,9 +110,9 @@ namespace DataBase
                     u1.Inventories.Add(inventory2);
                     u1.Inventories.Add(inventory3);
 
-                    context.PpUser.Add(u1);
+                    dbc.PpUser.Add(u1);
 
-                    context.SaveChanges();
+                    dbc.SaveChanges();
 
 
                     PpUser u2 = new PpUser()
@@ -129,9 +129,9 @@ namespace DataBase
                     inventory5.ItemCollection.Add(ii5);
                     inventory5.ItemCollection.Add(ii6);
 
-                    context.PpUser.Add(u2);
+                    dbc.PpUser.Add(u2);
 
-                    context.SaveChanges();
+                    dbc.SaveChanges();
                 }
 
             }
