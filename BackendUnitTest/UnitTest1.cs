@@ -2,6 +2,7 @@ using System.Runtime.InteropServices.ComTypes;
 using NUnit.Framework;
 using DataBase;
 using DataBase.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendUnitTest
 {
@@ -12,7 +13,7 @@ namespace BackendUnitTest
        
         public void Setup()
         {
-            MyDbContext dbc = new MyDbContext();
+            MyDbContext dbc = new MyDbContext(new DbContextOptions<MyDbContext>());
             uut = new UnitOfWork(dbc);
         }
 
