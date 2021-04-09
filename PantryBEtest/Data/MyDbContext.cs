@@ -79,6 +79,7 @@ namespace DataBase.Data
         public DbSet<PpUser> PpUser { get; set; }
         public DbSet<Item> Item { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
+        public DbSet<Fridge> Fridge { get; set; }
         public DbSet<InventoryItem> InventoryItem { get; set; }
 
     }

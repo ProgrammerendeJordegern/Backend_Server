@@ -4,14 +4,16 @@ using DataBase.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataBase.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210409120529_inheritanceInventory")]
+    partial class inheritanceInventory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,10 +28,6 @@ namespace DataBase.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("PpUserId")
                         .HasColumnType("int");
 
@@ -38,8 +36,6 @@ namespace DataBase.Migrations
                     b.HasIndex("PpUserId");
 
                     b.ToTable("Inventory");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Inventory");
                 });
 
             modelBuilder.Entity("DataBase.Item", b =>
@@ -112,13 +108,6 @@ namespace DataBase.Migrations
                     b.HasKey("PpUserId");
 
                     b.ToTable("PpUser");
-                });
-
-            modelBuilder.Entity("DataBase.Fridge", b =>
-                {
-                    b.HasBaseType("DataBase.Inventory");
-
-                    b.HasDiscriminator().HasValue("Fridge");
                 });
 
             modelBuilder.Entity("DataBase.Inventory", b =>

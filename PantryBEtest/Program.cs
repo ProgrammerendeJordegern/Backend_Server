@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DataBase.Data;
 using DataBase.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataBase
 {
@@ -10,13 +11,23 @@ namespace DataBase
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Pantry Passion Backend Server. Want to add dummydata (y)");
+            Console.WriteLine("Welcome to Pantry Passion Backend Server.");
 
             using (var context = new MyDbContext())
             {
-                var input = Console.ReadLine();
-                if(input=="y") AddDummyData();
-                Console.WriteLine("\n\nDummydata Added");
+                
+                using (var UOW = new UnitOfWork(new MyDbContext()))
+                {
+                    var user = UOW.Users.GetUserWithEmail("mail@mail.dk");
+                    if (user == null)
+                    {
+                        Console.WriteLine("Adding Dummydata...");
+                        AddDummyData();
+                        Console.WriteLine("\n\nDummydata Added");
+                    }
+                }
+                    
+                
 
                 
                 using (var UOW = new UnitOfWork(new MyDbContext()))
@@ -25,7 +36,7 @@ namespace DataBase
                     var inventories = UOW.Users.GetInventoriesWithUser(23);
                     if (inventories != null) { 
                         var fridge = inventories.SingleOrDefault(i => i.GetType() == typeof(Fridge));
-                        Console.WriteLine(fridge.InventoryId);
+                        Console.WriteLine(inventories.ElementAt(0).GetType());
                         //Print content in fridge
                         Console.WriteLine("Indhold i køleskab: ");
                         foreach (var item in fridge.ItemCollection)
@@ -33,15 +44,21 @@ namespace DataBase
                             Console.WriteLine(item.Item.Name+ ": "+ item.Amount);
                         }
                     }
+                    
 
                 //Search for user and change name
                 Console.WriteLine("Indtast bruger ID:");
-                    input = Console.ReadLine();
+                    var input = Console.ReadLine();
                     PpUser user = UOW.Users.Get(int.Parse(input));
+                    if (user != null) { 
                     Console.WriteLine("Name: "+user.Name+" Type new Name: ");
                     input = Console.ReadLine();
                     user.Name = input;
                     UOW.Complete();
+                    }
+                    else Console.WriteLine("Could not find user.");
+
+                    //Get passwordHash
                     PpUser u2 = UOW.Users.GetUserWithEmail("mail@mail.dk");
                     Console.WriteLine(u2.PasswordHash);
                 }
