@@ -18,7 +18,7 @@ namespace DataBase.Data
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
-            _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PpTest;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         }
 

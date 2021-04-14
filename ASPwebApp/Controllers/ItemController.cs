@@ -8,24 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using DataBase;
 using DataBase.Data;
 
-namespace test.Controllers
+namespace ASPwebApp.Controllers
 {
-    public class ItemsController : Controller
+    public class ItemController : Controller
     {
         private readonly MyDbContext _context;
 
-        public ItemsController(MyDbContext context)
+        public ItemController(MyDbContext context)
         {
             _context = context;
         }
 
-        // GET: Items
+        // GET: Item
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Item.ToListAsync());
+            // return Content("Kom nu...");
+            //var kurt = await _context.Item.ToListAsync();
+            
+             return View();
         }
 
-        // GET: Items/Details/5
+        // GET: Item/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,18 +46,18 @@ namespace test.Controllers
             return View(item);
         }
 
-        // GET: Items/Create
+        // GET: Item/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Items/Create
+        // POST: Item/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,Name,AverageLifespanDays,Size,DesiredMinimumAmount")] Item item)
+        public async Task<IActionResult> Create([Bind("ItemId,Ean,Name,AverageLifespanDays,Size,DesiredMinimumAmount")] Item item)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +68,7 @@ namespace test.Controllers
             return View(item);
         }
 
-        // GET: Items/Edit/5
+        // GET: Item/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,12 +84,12 @@ namespace test.Controllers
             return View(item);
         }
 
-        // POST: Items/Edit/5
+        // POST: Item/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemId,Name,AverageLifespanDays,Size,DesiredMinimumAmount")] Item item)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemId,Ean,Name,AverageLifespanDays,Size,DesiredMinimumAmount")] Item item)
         {
             if (id != item.ItemId)
             {
@@ -116,7 +119,7 @@ namespace test.Controllers
             return View(item);
         }
 
-        // GET: Items/Delete/5
+        // GET: Item/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,7 +137,7 @@ namespace test.Controllers
             return View(item);
         }
 
-        // POST: Items/Delete/5
+        // POST: Item/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

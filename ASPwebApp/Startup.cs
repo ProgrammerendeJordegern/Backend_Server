@@ -11,8 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataBase.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace test
+namespace ASPwebApp
 {
     public class Startup
     {
@@ -30,8 +32,11 @@ namespace test
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "test", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ASPwebApp", Version = "v1" });
             });
+
+            services.AddDbContext<MyDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +46,7 @@ namespace test
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "test v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ASPwebApp v1"));
             }
 
             app.UseHttpsRedirection();
@@ -53,7 +58,12 @@ namespace test
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            
         }
     }
 }
