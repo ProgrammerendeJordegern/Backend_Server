@@ -15,6 +15,7 @@ namespace DataBase
 
             using (var context = new MyDbContext())
             {
+                context.Database.EnsureCreated();
                 
                 using (var UOW = new UnitOfWork(new MyDbContext()))
                 {
@@ -33,7 +34,7 @@ namespace DataBase
                 using (var UOW = new UnitOfWork(new MyDbContext()))
                 {
                     Console.WriteLine("Getting inventories:");
-                    var inventories = UOW.Users.GetInventoriesWithUser(23);
+                    var inventories = UOW.Users.GetInventoriesWithUser(1);
                     if (inventories != null) { 
                         var fridge = inventories.SingleOrDefault(i => i.GetType() == typeof(Fridge));
                         Console.WriteLine(inventories.ElementAt(1).GetType());

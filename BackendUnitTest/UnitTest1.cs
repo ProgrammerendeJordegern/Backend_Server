@@ -38,6 +38,23 @@ namespace BackendUnitTest
             {
                 dbc.Database.EnsureDeleted();
                 dbc.Dispose();
+                Console.WriteLine(@"slut");
+            }
+        }
+        [Test]
+        public void InsertSeedDataCheckItemsCorrect()
+        {
+            try
+            {
+                DataBase.Program.AddDummyData(new MyDbContext(new DbContextOptions<MyDbContext>()));
+                var user = uut.Users.GetUserWithEmail("mail@mail.dk");
+                Assert.That(dbc.PpUser.Count(), Is.EqualTo(2));
+            }
+            finally
+            {
+                dbc.Database.EnsureDeleted();
+                dbc.Dispose();
+                Console.WriteLine(@"slut");
             }
         }
     }
