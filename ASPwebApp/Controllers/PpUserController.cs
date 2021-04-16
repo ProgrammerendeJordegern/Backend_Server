@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using DataBase;
 using DataBase.Data;
 using DataBase.Models;
+using System.Text.Json.Serialization;
 
 namespace ASPwebApp.Controllers
 {
@@ -65,7 +67,7 @@ namespace ASPwebApp.Controllers
         {
             if (userId == null)
             {
-                return NotFound();
+                return Content(NotFound().StatusCode.ToString());
             }
 
             
@@ -76,10 +78,16 @@ namespace ASPwebApp.Controllers
             var inventory = uow.Users.GetInventoryWithUser((int)userId, typeof(Fridge));
             if (inventory == null)
             {
-                return NotFound();
+                return Content(NotFound().StatusCode.ToString());
             }
 
-            return View( inventory.ItemCollection);
+            //return View( inventory.ItemCollection);
+            string json="";
+            foreach (var ii in inventory.ItemCollection)
+            {
+                json += JsonSerializer.Serialize((ISimpleInventoryItem) ii);
+            }
+            return Content(json);
         }
 
         // GET: PpUser/Create

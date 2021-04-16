@@ -4,7 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataBase.Models
 {
-    public class InventoryItem
+    public interface ISimpleInventoryItem
+    {
+        public Item Item { get; set; }
+        public uint Amount { get; set; }
+        public DateTime DateAdded { get; set; }
+    }
+    public class InventoryItem:ISimpleInventoryItem
     {
         [Required]
         public int ItemId { get; set; }
