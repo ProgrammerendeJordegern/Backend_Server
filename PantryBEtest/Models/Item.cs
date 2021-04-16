@@ -4,8 +4,20 @@ using DataBase.Models;
 
 namespace DataBase
 {
-  
-    public class Item
+    public interface ISimpleItem
+    {
+        public int ItemId { get; set; }
+
+        public string Ean { get; set; }
+        [Required]
+        public string Name { get; set; }
+       // public ICollection<InventoryItem> InventoryCollection { get; set; } //En vare kan eksistere på flere lister (Fx smør i fryser og køleskab)
+
+        public uint AverageLifespanDays { get; set; }
+        public uint Size { get; set; }//Mass, Volume or amount
+        public uint DesiredMinimumAmount { get; set; } //Nødvendig for at genere indkøbslite
+    }
+    public class Item:ISimpleItem
     {
         public  int ItemId { get; set; }
 

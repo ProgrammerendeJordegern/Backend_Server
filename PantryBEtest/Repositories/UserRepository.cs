@@ -44,8 +44,10 @@ namespace DataBase.Repositories
                 .Include(u => u.Inventories)
                 .Single(u => u.PpUserId.Equals(id));
             //find inventory
-            var inventoryId = user?.Inventories.Single(i => i.GetType() == type).InventoryId;
+            if (!user.Inventories.Any()) return null;
+            var inventoryId = user?.Inventories?.Single(i => i?.GetType() == type)?.InventoryId;
            //get items in inventory
+           if (inventoryId == null) return null;
             var inventory= PlutoContext.Inventory.Include(i=>i.ItemCollection)
                 .ThenInclude(ic=>ic.Item)
                 .Single(i => i.InventoryId == inventoryId);
