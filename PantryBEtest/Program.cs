@@ -33,6 +33,14 @@ namespace DataBase
                 
                 using (var UOW = new UnitOfWork(new MyDbContext()))
                 {
+                    var i = UOW.Users.GetInventoryWithUser(1, typeof(Fridge));
+                    Console.WriteLine("getinventorywith user id:");
+                    foreach (var elem in i.ItemCollection)
+                    {
+                       Console.WriteLine( elem.Item.Name);
+                    }
+                    
+
                     Console.WriteLine("Getting inventories:");
                     var inventories = UOW.Users.GetInventoriesWithUser(1);
                     if (inventories != null) { 
