@@ -17,6 +17,17 @@ namespace DataBase
         public uint Size { get; set; }//Mass, Volume or amount
         public uint DesiredMinimumAmount { get; set; } //Nødvendig for at genere indkøbslite
     }
+
+    public class SimpleItem : ISimpleItem
+    {
+        public int ItemId { get; set; }
+        public string Ean { get; set; }
+        public string Name { get; set; }
+        public uint AverageLifespanDays { get; set; }
+        public uint Size { get; set; }
+        public uint DesiredMinimumAmount { get; set; }
+    }
+
     public class Item:ISimpleItem
     {
         public  int ItemId { get; set; }
