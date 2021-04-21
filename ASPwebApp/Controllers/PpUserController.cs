@@ -81,11 +81,15 @@ namespace ASPwebApp.Controllers
                 return Content(NotFound().StatusCode.ToString());
             }
 
+            //return HTML page
             //return View( inventory.ItemCollection);
+
+            //Remove unnecesary data:
             string json="";
             foreach (var ii in inventory.ItemCollection)
             {
-                json += JsonSerializer.Serialize((ISimpleInventoryItem) ii);
+                ISimpleInventoryItem simpleInventoryItem = new SimpleInventoryItem(ii);
+                json += JsonSerializer.Serialize( simpleInventoryItem);
             }
             return Content(json);
         }

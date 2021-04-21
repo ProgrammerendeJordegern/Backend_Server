@@ -6,11 +6,25 @@ namespace DataBase.Models
 {
     public interface ISimpleInventoryItem
     {
-        public Item Item { get; set; }
+        public ISimpleItem Item { get; set; }
         public uint Amount { get; set; }
         public DateTime DateAdded { get; set; }
     }
-    public class InventoryItem:ISimpleInventoryItem
+
+    public class SimpleInventoryItem : ISimpleInventoryItem
+    {
+        public SimpleInventoryItem(InventoryItem ii)
+        {
+            Item = ii.Item;
+            Amount = ii.Amount;
+            DateAdded = ii.DateAdded;
+        }
+        public ISimpleItem Item { get; set; }
+        public uint Amount { get; set; }
+        public DateTime DateAdded { get; set; }
+    }
+
+    public class InventoryItem
     {
         [Required]
         public int ItemId { get; set; }

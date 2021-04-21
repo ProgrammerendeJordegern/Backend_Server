@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DataBase.Data;
+using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Repositories
@@ -48,7 +49,7 @@ namespace DataBase.Repositories
             var inventoryId = user?.Inventories?.Single(i => i?.GetType() == type)?.InventoryId;
            //get items in inventory
            if (inventoryId == null) return null;
-            var inventory= PlutoContext.Inventory.Include(i=>i.ItemCollection)
+            Inventory inventory= PlutoContext.Inventory.Include(i=>i.ItemCollection)
                 .ThenInclude(ic=>ic.Item)
                 .Single(i => i.InventoryId == inventoryId);
             return inventory;
