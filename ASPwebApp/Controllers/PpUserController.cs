@@ -95,32 +95,7 @@ namespace ASPwebApp.Controllers
             return Content(json);
         }
 
-        public async Task<ActionResult<SimpleInventoryItem>> InventoryItem(int? InventoryId)
-        {
-            InventoryItem inIt = await _context.InventoryItem
-                .Include(i => i.Item)
-                .SingleAsync(i => i.InventoryId == InventoryId);
-            var simpelInIt = new SimpleInventoryItem(inIt);
-            return simpelInIt;
-        }
-        [HttpPost]
-        public async Task<IActionResult> InventoryItemEdit([FromBody] InventoryItem? sII)
-        {
-            //Todo Error handling
-            InventoryItem inIt = await _context.InventoryItem
-                .Include(i => i.Item)
-                .SingleAsync(i => i.InventoryId == sII.InventoryId&&i.ItemId==sII.ItemId);
-
-            inIt.Amount = sII.Amount;
-            inIt.Item.Name = sII.Item.Name;
-            inIt.Item.AverageLifespanDays = sII.Item.AverageLifespanDays;
-            inIt.Item.DesiredMinimumAmount = sII.Item.DesiredMinimumAmount;
-            inIt.Item.Ean = sII.Item.Ean;
-            inIt.Item.Size = sII.Item.Size;
-            _context.Update(inIt);
-            _context.SaveChanges();
-            return Ok();
-        }
+       
 
         // GET: PpUser/Create
         public IActionResult Create()
