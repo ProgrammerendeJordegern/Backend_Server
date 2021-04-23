@@ -37,20 +37,21 @@ namespace DataBase
                     Console.WriteLine("getinventorywith user id:");
                     foreach (var elem in i.ItemCollection)
                     {
-                       Console.WriteLine( elem.Item.Name);
+                        Console.WriteLine(elem.Item.Name);
                     }
-                    
+
 
                     Console.WriteLine("Getting inventories:");
                     var inventories = UOW.Users.GetInventoriesWithUser(1);
-                    if (inventories != null) { 
+                    if (inventories != null)
+                    {
                         var fridge = inventories.SingleOrDefault(i => i.GetType() == typeof(Fridge));
                         Console.WriteLine(inventories.ElementAt(1).GetType());
                         //Print content in fridge
                         Console.WriteLine("Indhold i køleskab: ");
                         foreach (var item in fridge.ItemCollection)
                         {
-                            Console.WriteLine(item.Item.Name+ ": "+ item.Amount);
+                            Console.WriteLine(item.Item.Name + ": " + item.Amount);
                         }
                     }
                     
