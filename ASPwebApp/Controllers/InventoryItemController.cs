@@ -21,11 +21,13 @@ namespace ASPwebApp.Controllers
 
 
         // GET: InventoryItem/Details/5
-        public async Task<ActionResult<SimpleInventoryItem>> Get(int? InventoryItemId)
+        public async Task<ActionResult<SimpleInventoryItem>> Get(int? inventoryItemId)
         {
+            if (inventoryItemId == null) return BadRequest();
             InventoryItem inIt = await _context.InventoryItem
                 .Include(i => i.Item)
-                .SingleAsync(i => i.InventoryId == InventoryItemId);
+                .SingleAsync(i => i.InventoryId == inventoryItemId);
+            if (inIt == null) return NotFound();
             //Copy content into simple class (JSON converter complains about too many references)
             var simpelInIt = new SimpleInventoryItem(inIt);
             return simpelInIt;
@@ -33,6 +35,7 @@ namespace ASPwebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit([FromBody] InventoryItem? inventoryItemFromClient)
         {
+            if (inventoryItemFromClient == null) return BadRequest();
             InventoryItem inventoryItemFromDb = await _context.InventoryItem
                 .Include(i => i.Item)
                 .SingleAsync(i => i.InventoryId == inventoryItemFromClient.InventoryId && i.ItemId == inventoryItemFromClient.ItemId);
@@ -46,7 +49,7 @@ namespace ASPwebApp.Controllers
             inventoryItemFromDb.Item.Size = inventoryItemFromClient.Item.Size;
             _context.Update(inventoryItemFromDb);
             await _context.SaveChangesAsync();
-            return Ok();
+            return Accepted();
         }
 
 
@@ -59,6 +62,7 @@ namespace ASPwebApp.Controllers
             if (item == null) return BadRequest();
             inventoryItem.Inventory = inventory;
             inventoryItem.Item = item;
+            inventoryItem.DateAdded=DateTime.Now;
             _context.Add(inventoryItem);
            int result= await _context.SaveChangesAsync();
            if (result > 0) return Accepted();
@@ -71,6 +75,7 @@ namespace ASPwebApp.Controllers
             var inventory = await _context.Inventory.SingleAsync(i => i.InventoryId == inventoryItem.InventoryId);
             if (inventory == null) return BadRequest();
             inventoryItem.Inventory = inventory;
+            inventoryItem.DateAdded = DateTime.Now;
             _context.Add(inventoryItem);
             int result = await _context.SaveChangesAsync();
             if (result > 0) return Accepted();
