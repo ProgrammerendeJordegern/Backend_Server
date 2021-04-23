@@ -11,6 +11,7 @@ using DataBase;
 using DataBase.Data;
 using DataBase.Models;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPwebApp.Controllers
 {
@@ -29,24 +30,25 @@ namespace ASPwebApp.Controllers
             return View(await _context.PpUser.ToListAsync());
         }
 
-        // GET: PpUser/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        //GET: PpUser/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var ppUser = await _context.PpUser
-        //        .FirstOrDefaultAsync(m => m.PpUserId == id);
-        //    if (ppUser == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var ppUser = await _context.PpUser
+                .FirstOrDefaultAsync(m => m.PpUserId == id);
+            if (ppUser == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(ppUser);
-        //}
+            return View(ppUser);
+        }
         // GET: PpUser/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(string? email)
         {
             if (email == null)
@@ -71,9 +73,9 @@ namespace ASPwebApp.Controllers
                 return Content(NotFound().StatusCode.ToString());
             }
 
-            
+
             if (InventoryType == null) InventoryType = typeof(Fridge);
-            
+
 
             UnitOfWork uow = new UnitOfWork(_context);
             var inventory = uow.Users.GetInventoryWithUser((int)userId, typeof(Fridge));
@@ -86,11 +88,11 @@ namespace ASPwebApp.Controllers
             //return View( inventory.ItemCollection);
 
             //Remove unnecesary data:
-            string json="";
+            string json = "";
             foreach (var ii in inventory.ItemCollection)
             {
                 ISimpleInventoryItem simpleInventoryItem = new SimpleInventoryItem(ii);
-                json += JsonSerializer.Serialize( simpleInventoryItem);
+                json += JsonSerializer.Serialize(simpleInventoryItem);
             }
             return Content(json);
         }
