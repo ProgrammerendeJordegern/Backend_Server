@@ -15,6 +15,7 @@ namespace DataBase
 
         public uint AverageLifespanDays { get; set; }
         public uint Size { get; set; }//Mass, Volume or amount
+        public string SizeUnit { get; set; }
         public uint DesiredMinimumAmount { get; set; } //Nødvendig for at genere indkøbslite
     }
 
@@ -25,6 +26,7 @@ namespace DataBase
         public string Name { get; set; }
         public uint AverageLifespanDays { get; set; }
         public uint Size { get; set; }
+        public string SizeUnit { get; set; }
         public uint DesiredMinimumAmount { get; set; }
     }
 
@@ -40,6 +42,7 @@ namespace DataBase
 
         public uint AverageLifespanDays { get; set; }
         public uint Size { get; set; }//Mass, Volume or amount
+        public string SizeUnit { get; set; }
         public uint DesiredMinimumAmount { get; set; } //Nødvendig for at genere indkøbslite
 
     }

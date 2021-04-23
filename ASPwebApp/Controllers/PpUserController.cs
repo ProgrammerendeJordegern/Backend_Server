@@ -64,8 +64,9 @@ namespace ASPwebApp.Controllers
             return View(ppUser);
         }
 
-        public async Task<IActionResult> Inventory(int? userId, Type? InventoryType)
+        public async Task<IActionResult> Inventory(int? userId, Type? InventoryType,[FromHeader]string username,[FromHeader] string password)
         {
+            if (username == "flemming") return Content("HAHAHA");
             if (userId == null)
             {
                 return Content(NotFound().StatusCode.ToString());

@@ -38,8 +38,9 @@ namespace DataBase.Repositories
             return null;
         }
 
-        public Inventory GetInventoryWithUser(int id, Type type)
+        public Inventory GetInventoryWithUser(int id, Type type)//overload
         {
+            if (PlutoContext.PpUser.Any(u => u.PpUserId == id) == false) return null;
             //find user
             PpUser user = PlutoContext.PpUser
                 .Include(u => u.Inventories)

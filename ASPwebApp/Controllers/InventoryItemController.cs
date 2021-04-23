@@ -21,11 +21,11 @@ namespace ASPwebApp.Controllers
 
 
         // GET: InventoryItem/Details/5
-        public async Task<ActionResult<SimpleInventoryItem>> Get(int? InventoryId)
+        public async Task<ActionResult<SimpleInventoryItem>> Get(int? InventoryItemId)
         {
             InventoryItem inIt = await _context.InventoryItem
                 .Include(i => i.Item)
-                .SingleAsync(i => i.InventoryId == InventoryId);
+                .SingleAsync(i => i.InventoryId == InventoryItemId);
             //Copy content into simple class (JSON converter complains about too many references)
             var simpelInIt = new SimpleInventoryItem(inIt);
             return simpelInIt;
@@ -33,7 +33,6 @@ namespace ASPwebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit([FromBody] InventoryItem? inventoryItemFromClient)
         {
-            //Todo Error handling
             InventoryItem inventoryItemFromDb = await _context.InventoryItem
                 .Include(i => i.Item)
                 .SingleAsync(i => i.InventoryId == inventoryItemFromClient.InventoryId && i.ItemId == inventoryItemFromClient.ItemId);
@@ -51,16 +50,31 @@ namespace ASPwebApp.Controllers
         }
 
 
-        public async Task<IActionResult> Create([FromBody] InventoryItem? inventoryItem)
+        public async Task<IActionResult> CreateWExistingItem([FromBody] InventoryItem? inventoryItem)
+        {
+            if (inventoryItem == null) return NoContent();
+            var inventory = await _context.Inventory.SingleAsync(i => i.InventoryId == inventoryItem.InventoryId);
+            if (inventory == null) return BadRequest();
+            var item =await  _context.Item.SingleAsync(i => i.ItemId == inventoryItem.ItemId);
+            if (item == null) return BadRequest();
+            inventoryItem.Inventory = inventory;
+            inventoryItem.Item = item;
+            _context.Add(inventoryItem);
+           int result= await _context.SaveChangesAsync();
+           if (result > 0) return Accepted();
+           return BadRequest();
+
+        }
+        public async Task<IActionResult> CreateWNewItem([FromBody] InventoryItem? inventoryItem)
         {
             if (inventoryItem == null) return NoContent();
             var inventory = await _context.Inventory.SingleAsync(i => i.InventoryId == inventoryItem.InventoryId);
             if (inventory == null) return BadRequest();
             inventoryItem.Inventory = inventory;
             _context.Add(inventoryItem);
-           int result= await _context.SaveChangesAsync();
-           if (result > 0) return Accepted();
-           return BadRequest();
+            int result = await _context.SaveChangesAsync();
+            if (result > 0) return Accepted();
+            return BadRequest();
 
         }
 

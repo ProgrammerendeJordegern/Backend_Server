@@ -10,9 +10,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendUnitTest", "BackendU
 		{73731C24-8DE7-4226-B111-9BCCB4B17672} = {73731C24-8DE7-4226-B111-9BCCB4B17672}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASPwebApp", "ASPwebApp\ASPwebApp.csproj", "{6E5436C1-E6A0-4587-970D-2F301F77AC8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASPwebApp", "ASPwebApp\ASPwebApp.csproj", "{6E5436C1-E6A0-4587-970D-2F301F77AC8C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{73731C24-8DE7-4226-B111-9BCCB4B17672} = {73731C24-8DE7-4226-B111-9BCCB4B17672}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7D0882B7-EF7B-4401-97A9-B14899995DCC}"
+	ProjectSection(SolutionItems) = preProject
+		nuke database.sql = nuke database.sql
 	EndProjectSection
 EndProject
 Global
