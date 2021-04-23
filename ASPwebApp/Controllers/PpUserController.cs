@@ -23,9 +23,12 @@ namespace ASPwebApp.Controllers
             _context = context;
         }
 
+    
+
         // GET: PpUser
         public async Task<IActionResult> Index()
         {
+            
             return View(await _context.PpUser.ToListAsync());
         }
 
@@ -69,13 +72,14 @@ namespace ASPwebApp.Controllers
             if (username == "flemming") return Content("HAHAHA");
             if (userId == null)
             {
-                return Content(NotFound().StatusCode.ToString());
+                return BadRequest();
+                // return Content(NotFound().StatusCode.ToString());
             }
 
             
             if (InventoryType == null) InventoryType = typeof(Fridge);
-            
 
+           // return Content(typeof(Fridge).ToString());
             UnitOfWork uow = new UnitOfWork(_context);
             var inventory = uow.Users.GetInventoryWithUser((int)userId, typeof(Fridge));
             if (inventory == null)
