@@ -33,7 +33,7 @@ namespace DataBase
                 
                 using (var UOW = new UnitOfWork(new MyDbContext()))
                 {
-                    var i = UOW.Users.GetInventoryWithUser(1, typeof(Fridge));
+                    var i = UOW.Users.GetInventoryWithUser(23, typeof(Fridge));
                     Console.WriteLine("getinventorywith user id:");
                     foreach (var elem in i.ItemCollection)
                     {

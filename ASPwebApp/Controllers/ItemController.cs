@@ -29,7 +29,7 @@ namespace ASPwebApp.Controllers
         }
 
         // GET: Item/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<ActionResult<Item>> FromId(int? id)
         {
             if (id == null)
             {
@@ -43,7 +43,39 @@ namespace ASPwebApp.Controllers
                 return NotFound();
             }
 
-            return View(item);
+            return item;
+        }
+        public async Task<ActionResult<Item>> FromEan(string? ean)
+        {
+            if (ean == null)
+            {
+                return NotFound();
+            }
+
+            var item = await _context.Item
+                .FirstOrDefaultAsync(m => m.Ean == ean);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return item;
+        }
+        public async Task<ActionResult<Item>> FromName(string? name)
+        {
+            if (name == null||name.Length<3)
+            {
+                return NotFound();
+            }
+
+            var item = await _context.Item
+                .FirstOrDefaultAsync(m => m.Name.Contains(name));//Contains may be changed to ==
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return item;
         }
 
         // GET: Item/Create
