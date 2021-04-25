@@ -67,7 +67,7 @@ namespace ASPwebApp.Controllers
             return View(ppUser);
         }
 
-        public async Task<IActionResult> Inventory(int? userId, Type? InventoryType,[FromHeader]string username,[FromHeader] string password)
+        public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int? userId, int? InventoryType,[FromHeader]string username,[FromHeader] string password)
         {
             if (username == "flemming") return Content("HAHAHA");
             if (userId == null)
@@ -76,10 +76,13 @@ namespace ASPwebApp.Controllers
                 // return Content(NotFound().StatusCode.ToString());
             }
 
-            
-            if (InventoryType == null) InventoryType = typeof(Fridge);
+            Type convertedInventoryType;
+            if (InventoryType == null) convertedInventoryType=typeof(Fridge);
+            else
+            {
+                convertedInventoryType = FromEnumToType(InventoryType);
+            }
 
-           // return Content(typeof(Fridge).ToString());
             UnitOfWork uow = new UnitOfWork(_context);
             var inventory = uow.Users.GetInventoryWithUser((int)userId, typeof(Fridge));
             if (inventory == null)
@@ -92,15 +95,43 @@ namespace ASPwebApp.Controllers
 
             //Remove unnecesary data:
             string json="";
+            List < SimpleInventoryItem > listII= new List<SimpleInventoryItem>();
             foreach (var ii in inventory.ItemCollection)
             {
-                ISimpleInventoryItem simpleInventoryItem = new SimpleInventoryItem(ii);
-                json += JsonSerializer.Serialize( simpleInventoryItem);
+                listII.Add(new SimpleInventoryItem(ii));
+                //json += JsonSerializer.Serialize( simpleInventoryItem);
             }
-            return Content(json);
+            return listII;
         }
 
-       
+        public static Type FromEnumToType(int? InventoryType)
+        {
+            switch ((InventoryTypes)InventoryType)
+            {
+                case InventoryTypes.Freezer:
+                    return typeof(Freezer);
+                case InventoryTypes.Fridge:
+                    return typeof(Fridge);
+                case InventoryTypes.Pantry:
+                    return typeof(Pantry);
+                case InventoryTypes.ShoppingList:
+                    return typeof(ShoppingList);
+                case InventoryTypes.All:
+                    return typeof(ShoppingList);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(InventoryType), InventoryType, null);
+            }
+        }
+
+        public async Task<ActionResult<List<Inventory>>> GetAllInventories(int? userId)
+        {
+            if (userId == null) return BadRequest();
+            UnitOfWork uow = new UnitOfWork(_context);
+            var list = uow.Users.GetInventoriesWithUser((int)userId).ToList();
+            return Ok();
+        }
+
+
 
         // GET: PpUser/Create
         public IActionResult Create()
