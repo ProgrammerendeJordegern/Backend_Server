@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-
+public enum InventoryTypes { All,Freezer,Fridge,Pantry,ShoppingList}
 namespace DataBase.Models
 {
     public interface ISimpleInventoryItem
@@ -11,6 +11,7 @@ namespace DataBase.Models
         public ISimpleItem Item { get; set; }
         public uint Amount { get; set; }
         public DateTime DateAdded { get; set; }
+        public InventoryTypes InventoryType { get; set; }
     }
 
     public class SimpleInventoryItem : ISimpleInventoryItem
@@ -30,6 +31,7 @@ namespace DataBase.Models
         public ISimpleItem Item { get; set; }
         public uint Amount { get; set; }
         public DateTime DateAdded { get; set; }
+        public InventoryTypes InventoryType { get; set; }
 
         public static implicit operator SimpleInventoryItem(InventoryItem v)
         {
@@ -39,6 +41,14 @@ namespace DataBase.Models
 
     public class InventoryItem
     {
+        public InventoryItem() { }
+
+        public InventoryItem(SimpleInventoryItem s)
+        {
+            this.InventoryId = s.InventoryId;
+            this.ItemId=s.ItemId;
+            this.Amount = s.Amount;
+        }
         [Required]
         public int ItemId { get; set; }
         [Required]
