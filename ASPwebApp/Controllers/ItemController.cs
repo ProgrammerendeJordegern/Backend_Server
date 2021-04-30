@@ -13,16 +13,17 @@ namespace ASPwebApp.Controllers
     public class ItemController : Controller
     {
         private readonly MyDbContext _context;
+        private UnitOfWork uow;
 
         public ItemController(MyDbContext context)
         {
             _context = context;
+            uow = new UnitOfWork(_context);
         }
 
         // GET: Item
         public async Task<IActionResult> Index()
         {
-            // return Content("Kom nu...");
             var kurt = await _context.Item.ToListAsync();
             
              return View(kurt);
@@ -36,8 +37,9 @@ namespace ASPwebApp.Controllers
                 return NotFound();
             }
 
-            var item = await _context.Item
-                .FirstOrDefaultAsync(m => m.ItemId == id);
+            var item =uow.Items.Get((int) id);
+                //= await _context.Item
+                //.FirstOrDefaultAsync(m => m.ItemId == id);
             if (item == null)
             {
                 return NotFound();
@@ -52,8 +54,9 @@ namespace ASPwebApp.Controllers
                 return NotFound();
             }
 
-            var item = await _context.Item
-                .FirstOrDefaultAsync(m => m.Ean == ean);
+            var item = await uow.Items.GetItemWithEan(ean);
+                //_context.Item
+                //.FirstOrDefaultAsync(m => m.Ean == ean);
             if (item == null)
             {
                 return NotFound();
@@ -67,9 +70,12 @@ namespace ASPwebApp.Controllers
             {
                 return NotFound();
             }
-
-            var item = await _context.Item
-                .FirstOrDefaultAsync(m => m.Name.Contains(name));//Contains may be changed to ==
+            var item= uow.Items.SingleOrDefault(i => 
+                          i.Name.ToLower()==(name.ToLower())) 
+                      ?? uow.Items.SingleOrDefault(i => //findes ikke et eksakt match, søges bredere:
+                          i.Name.ToLower().Contains(name.ToLower()));
+            //await _context.Item
+                //.FirstOrDefaultAsync(m => m.Name.Contains(name));//Contains may be changed to ==
             if (item == null)
             {
                 return NotFound();
@@ -121,7 +127,7 @@ namespace ASPwebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemId,Ean,Name,AverageLifespanDays,Size,DesiredMinimumAmount")] Item item)
+        public async Task<ActionResult> Edit(int id, [Bind("ItemId,Ean,Name,AverageLifespanDays,Size,DesiredMinimumAmount")] Item item)
         {
             if (id != item.ItemId)
             {
@@ -146,9 +152,11 @@ namespace ASPwebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return Accepted();
             }
-            return View(item);
+
+            return Accepted();
         }
 
         // GET: Item/Delete/5

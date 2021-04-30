@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net.Mail;
 using System.Runtime.InteropServices.ComTypes;
 using NUnit.Framework;
 using DataBase;
@@ -88,6 +89,51 @@ namespace BackendUnitTest
             {
                 dbc.Database.EnsureDeleted();
                 dbc.Dispose();
+            }
+        }
+        [Test]
+        public void UOW_AddUser_WithSeedData_CheckUserCorrect()
+        {
+            try
+            {
+                uow.Users.Add(new PpUser(){CreationDate = DateTime.Now,Email = "a@a.dk",Name = "a",PasswordHash = "b"});
+                uow.Complete();
+                var user = uow.Users.GetUserWithEmail("a@a.dk");
+                Assert.Multiple(()=>
+                {
+                    Assert.That(user.Name,Is.EqualTo("a"));
+                    Assert.That(user.PasswordHash, Is.EqualTo("b"));
+                });
+            }
+            finally
+            {
+                dbc.Database.EnsureDeleted();
+                dbc.Dispose();
+                uow.Dispose();
+            }
+        }
+        [Test]
+        public void UOW_EditUser_WithSeedData_CheckUserCorrect()
+        {
+            try
+            {
+                DataBase.Program.AddDummyData(new MyDbContext(new DbContextOptions<MyDbContext>()));
+
+                PpUser user = uow.Users.GetUserWithEmail("mail@mail.dk");
+                
+                   
+                    user.Name = "NytNavn";
+                    uow.Complete();
+                
+                
+                    Assert.That(uow.Users.GetUserWithEmail("mail@mail.dk").Name, Is.EqualTo("NytNavn"));
+                   
+            }
+            finally
+            {
+                dbc.Database.EnsureDeleted();
+                dbc.Dispose();
+                uow.Dispose();
             }
         }
     }
