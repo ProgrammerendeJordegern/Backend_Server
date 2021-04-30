@@ -6,6 +6,7 @@ namespace DataBase.Data
     public interface IUnitOfWork : IDisposable
     {
         IUserRepository Users { get; }
+        IItemRepository Items { get; }
         int Complete();
     }
     public class UnitOfWork : IUnitOfWork
@@ -16,10 +17,13 @@ namespace DataBase.Data
         {
             _context = context;
             Users = new UserRepository(_context);
+            Items = new ItemRepository(_context);
         }
 
 
         public IUserRepository Users { get; private set; }
+        public IItemRepository Items { get; }
+
 
         public int Complete()
         {

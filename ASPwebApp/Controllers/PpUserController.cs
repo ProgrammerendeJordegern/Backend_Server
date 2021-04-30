@@ -17,10 +17,12 @@ namespace ASPwebApp.Controllers
     public class PpUserController : Controller
     {
         private readonly MyDbContext _context;
+        private UnitOfWork uow;
 
         public PpUserController(MyDbContext context)
         {
             _context = context;
+            uow = new UnitOfWork(context);
         }
 
     
@@ -57,7 +59,6 @@ namespace ASPwebApp.Controllers
                 return NotFound();
             }
 
-            UnitOfWork uow = new UnitOfWork(_context);
             var ppUser = uow.Users.GetUserWithEmail(email);
             if (ppUser == null)
             {
@@ -83,7 +84,6 @@ namespace ASPwebApp.Controllers
                 convertedInventoryType = FromEnumToType(InventoryType);
             }
 
-            UnitOfWork uow = new UnitOfWork(_context);
             var inventory = uow.Users.GetInventoryWithUser((int)userId, typeof(Fridge));
             if (inventory == null)
             {
@@ -126,7 +126,6 @@ namespace ASPwebApp.Controllers
         public async Task<ActionResult<List<Inventory>>> GetAllInventories(int? userId)
         {
             if (userId == null) return BadRequest();
-            UnitOfWork uow = new UnitOfWork(_context);
             var list = uow.Users.GetInventoriesWithUser((int)userId).ToList();
             return Ok();
         }
