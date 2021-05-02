@@ -86,7 +86,7 @@ namespace DataBase.Data
         //    });
         //    mb.Entity<Inventory>().HasData(new Inventory() { InventoryId = 11, });
         //}
-
+        public DbSet<UserDb> User { get; set; }
         public DbSet<PpUser> PpUser { get; set; }
         public DbSet<Item> Item { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
