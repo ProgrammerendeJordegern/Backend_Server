@@ -8,6 +8,7 @@ namespace DataBase
     {
         public int PpUserId { get; set; }
         [Required]
+        //Email, Name, Password needs to be removed here 
         public string Email { get; set; }
         [Required]
         public string Name { get; set; }
