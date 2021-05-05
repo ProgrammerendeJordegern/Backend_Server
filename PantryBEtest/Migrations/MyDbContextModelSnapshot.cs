@@ -101,6 +101,12 @@ namespace DataBase.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AccessJWTToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(254)
                         .HasColumnType("nvarchar(254)");
@@ -109,11 +115,16 @@ namespace DataBase.Migrations
                         .HasMaxLength(96)
                         .HasColumnType("nvarchar(96)");
 
+                    b.Property<int?>("PpUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PwHash")
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("UserId");
+
+                    b.HasIndex("PpUserId");
 
                     b.ToTable("User");
                 });
