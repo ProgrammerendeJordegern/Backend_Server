@@ -7,14 +7,19 @@ namespace DataBase
     public class PpUser
     {
         public int PpUserId { get; set; }
-        [Required]
-        //Email, Name, Password needs to be removed here 
-        public string Email { get; set; }
-        [Required]
-        public string Name { get; set; }
-        [Required]
-        public string PasswordHash { get; set; }
         public ICollection<Inventory> Inventories { get; set; }
-        public DateTime CreationDate { get; set; }
+
+        //Constructor
+        public PpUser()
+        {
+            Inventories = new List<Inventory>();
+            Inventories.Add(new Freezer());
+            Inventories.Add(new Fridge());
+            Inventories.Add(new Pantry());
+            Inventories.Add(new ShoppingList());
+        }
+
+
+
     }
 }

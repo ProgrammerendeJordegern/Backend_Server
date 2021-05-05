@@ -4,14 +4,16 @@ using DataBase.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataBase.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210505120023_Added-AcessTokens-To-User-tables")]
+    partial class AddedAcessTokensToUsertables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,10 +101,8 @@ namespace DataBase.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AccessJWTToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(254)
@@ -112,16 +112,11 @@ namespace DataBase.Migrations
                         .HasMaxLength(96)
                         .HasColumnType("nvarchar(96)");
 
-                    b.Property<int?>("PpUserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PwHash")
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("PpUserId");
 
                     b.ToTable("User");
                 });
@@ -132,6 +127,21 @@ namespace DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PpUserId");
 
@@ -190,15 +200,6 @@ namespace DataBase.Migrations
                     b.Navigation("Inventory");
 
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("DataBase.Models.UserDb", b =>
-                {
-                    b.HasOne("DataBase.PpUser", "PpUser")
-                        .WithMany()
-                        .HasForeignKey("PpUserId");
-
-                    b.Navigation("PpUser");
                 });
 
             modelBuilder.Entity("DataBase.Inventory", b =>

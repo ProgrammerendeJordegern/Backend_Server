@@ -11,6 +11,7 @@ using DataBase;
 using DataBase.Data;
 using DataBase.Models;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPwebApp.Controllers
 {
@@ -47,23 +48,24 @@ namespace ASPwebApp.Controllers
         //    return View(ppUser);
         //}
         // GET: PpUser/Details/5
-        public async Task<IActionResult> Details(string? email)
-        {
-            if (email == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(string? email)
+        //{
+        //    if (email == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            UnitOfWork uow = new UnitOfWork(_context);
-            var ppUser = uow.Users.GetUserWithEmail(email);
-            if (ppUser == null)
-            {
-                return NotFound();
-            }
+        //    UnitOfWork uow = new UnitOfWork(_context);
+        //    var ppUser = uow.Users.GetUserWithEmail(email);
+        //    if (ppUser == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(ppUser);
-        }
+        //    return View(ppUser);
+        //}
 
+        [Authorize]
         public async Task<IActionResult> Inventory(int? userId, Type? InventoryType)
         {
             if (userId == null)
@@ -81,9 +83,6 @@ namespace ASPwebApp.Controllers
             {
                 return Content(NotFound().StatusCode.ToString());
             }
-
-            //return HTML page
-            //return View( inventory.ItemCollection);
 
             //Remove unnecesary data:
             string json="";
@@ -103,6 +102,7 @@ namespace ASPwebApp.Controllers
             var simpelInIt = new SimpleInventoryItem(inIt);
             return simpelInIt;
         }
+
         [HttpPost]
         public async Task<IActionResult> InventoryItemEdit([FromBody] InventoryItem? sII)
         {
