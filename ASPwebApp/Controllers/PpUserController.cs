@@ -11,6 +11,7 @@ using DataBase;
 using DataBase.Data;
 using DataBase.Models;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPwebApp.Controllers
 {
@@ -52,12 +53,12 @@ namespace ASPwebApp.Controllers
         //    return View(ppUser);
         //}
         // GET: PpUser/Details/5
-        public async Task<IActionResult> Details(string? email)
-        {
-            if (email == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(string? email)
+        //{
+        //    if (email == null)
+        //    {
+        //        return NotFound();
+        //    }
 
             var ppUser = uow.Users.GetUserWithEmail(email);
             if (ppUser == null)
@@ -65,8 +66,8 @@ namespace ASPwebApp.Controllers
                 return NotFound();
             }
 
-            return View(ppUser);
-        }
+        //    return View(ppUser);
+        //}
 
         public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int? userId, int? InventoryType,[FromHeader]string username,[FromHeader] string password)
         {
@@ -89,9 +90,6 @@ namespace ASPwebApp.Controllers
             {
                 return Content(NotFound().StatusCode.ToString());
             }
-
-            //return HTML page
-            //return View( inventory.ItemCollection);
 
             //Remove unnecesary data:
             string json="";

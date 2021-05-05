@@ -4,14 +4,16 @@ using DataBase.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataBase.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210505125353_PPUserTable_UserDbTable_Connected")]
+    partial class PPUserTable_UserDbTable_Connected
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,9 +67,6 @@ namespace DataBase.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("SizeUnit")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ItemId");
 
                     b.ToTable("Item");
@@ -102,7 +101,8 @@ namespace DataBase.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AccessJWTToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -115,16 +115,11 @@ namespace DataBase.Migrations
                         .HasMaxLength(96)
                         .HasColumnType("nvarchar(96)");
 
-                    b.Property<int?>("PpUserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PwHash")
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("PpUserId");
 
                     b.ToTable("User");
                 });
@@ -193,15 +188,6 @@ namespace DataBase.Migrations
                     b.Navigation("Inventory");
 
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("DataBase.Models.UserDb", b =>
-                {
-                    b.HasOne("DataBase.PpUser", "PpUser")
-                        .WithMany()
-                        .HasForeignKey("PpUserId");
-
-                    b.Navigation("PpUser");
                 });
 
             modelBuilder.Entity("DataBase.Inventory", b =>
