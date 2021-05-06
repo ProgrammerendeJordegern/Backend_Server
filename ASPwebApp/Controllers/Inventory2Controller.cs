@@ -11,7 +11,7 @@ using DataBase.Models;
 
 namespace ASPwebApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Inventory")]
     [ApiController]
     public class Inventory2Controller : ControllerBase
     {
@@ -46,6 +46,12 @@ namespace ASPwebApp.Controllers
             }
             return inventoryItems;
         }
+        /// <summary>
+        /// Get 1 inventory (fx Fridge)
+        /// </summary>
+        /// <param name="userId">Måske snart unødvendig</param>
+        /// <param name="InventoryType">1:Freezer 2: Fridge 3: pantry 4: shopping list</param>
+        /// <returns></returns>
         [HttpGet("{userId}/{InventoryType}")]
         public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int? userId, int? InventoryType)
         {
