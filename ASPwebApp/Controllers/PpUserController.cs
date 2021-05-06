@@ -123,11 +123,22 @@ namespace ASPwebApp.Controllers
             }
         }
 
-        public async Task<ActionResult<List<Inventory>>> GetAllInventories(int? userId)
+        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories(int? userId)
         {
             if (userId == null) return BadRequest();
-            var list = uow.Users.GetInventoriesWithUser((int)userId).ToList();
-            return Ok();
+            var inventories = uow.Users.GetInventoriesWithUser((int)userId).ToList();
+            var inventoryItems = new List<SimpleInventoryItem>();
+
+            //Combine 4 list to one list
+            foreach (var inventory in inventories)
+            {
+                foreach (var item in inventory.ItemCollection)
+                {
+                    var simpleII = new SimpleInventoryItem(item);
+                    inventoryItems.Add(simpleII);
+                }
+            }
+            return inventoryItems;
         }
 
 

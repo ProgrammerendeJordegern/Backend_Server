@@ -35,6 +35,7 @@ namespace DataBase
                 {
                     var i = UOW.Users.GetInventoryWithUser(23, typeof(Fridge));
                     Console.WriteLine("getinventorywith user id:");
+                    if (i == null) return;
                     foreach (var elem in i.ItemCollection)
                     {
                        Console.WriteLine( elem.Item.Name);

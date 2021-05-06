@@ -21,13 +21,7 @@ namespace ASPwebApp.Controllers
             uow = new UnitOfWork(_context);
         }
 
-        // GET: Item
-        public async Task<IActionResult> Index()
-        {
-            var kurt = await _context.Item.ToListAsync();
-            
-             return View(kurt);
-        }
+   
 
         // GET: Item/Details/5
         public async Task<ActionResult<Item>> FromId(int? id)
@@ -84,42 +78,25 @@ namespace ASPwebApp.Controllers
             return item;
         }
 
-        // GET: Item/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+ 
 
-        // POST: Item/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemId,Ean,Name,AverageLifespanDays,Size,DesiredMinimumAmount")] Item item)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(item);
-        }
 
         // GET: Item/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpPut]
+        public async Task<ActionResult<Item>> Edit(int? id,[FromBody] Item newItem)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var item = await _context.Item.FindAsync(id);
-            if (item == null)
+            if (!_context.Item.Any(i=>i.ItemId==id))
             {
                 return NotFound();
             }
-            return View(item);
+            uow.Items.Add(newItem);
+            uow.Complete();
+            return newItem;
         }
 
         // POST: Item/Edit/5
