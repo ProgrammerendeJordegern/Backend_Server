@@ -11,7 +11,7 @@ using DataBase.Models;
 
 namespace ASPwebApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/InventoryItem")]
     [ApiController]
     public class InventoryItem2Controller : ControllerBase
     {
@@ -22,14 +22,12 @@ namespace ASPwebApp.Controllers
             _context = context;
             UnitOfWork uow = new UnitOfWork(_context);
         }
-
-        // GET: api/InventoryItem2
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<InventoryItem>>> GetInventoryItem()
-        {
-            return await _context.InventoryItem.ToListAsync();
-        }
-
+       
+        /// <summary>
+        /// get all inventory items containing this itemId
+        /// </summary>
+        /// <param name="ItemId"></param>
+        /// <returns></returns>
         // GET: InventoryItem/get?
         [HttpGet("{ItemId}")]
         public async Task<ActionResult<List<SimpleInventoryItem>>> Get(int? ItemId)
@@ -85,7 +83,13 @@ namespace ASPwebApp.Controllers
             await _context.SaveChangesAsync();
             return Accepted();
         }
-
+        /// <summary>
+        /// Create a new inventoryItem, but NOT a new Item
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="type"></param>
+        /// <param name="inventoryItem"></param>
+        /// <returns></returns>
         [HttpPost("existingItem/{userId}/{type}")]
         public async Task<ActionResult> CreateWExistingItem(int? userId, int? type, [FromBody] SimpleInventoryItem? inventoryItem)
         {
@@ -116,6 +120,13 @@ namespace ASPwebApp.Controllers
             return BadRequest();
 
         }
+        /// <summary>
+        /// Create a new InventoryItem AND a new Item
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="type">1-4</param>
+        /// <param name="inventoryItem"></param>
+        /// <returns></returns>
         [HttpPost("newItem/{userId}/{type}")]
         public async Task<ActionResult> CreateWNewItem(int? userId, int? type, [FromBody] InventoryItem? inventoryItem)
         {
@@ -136,7 +147,11 @@ namespace ASPwebApp.Controllers
             return BadRequest();
 
         }
-
+        /// <summary>
+        /// Auto generated Delete
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/InventoryItem2/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInventoryItem(int id)
