@@ -21,6 +21,19 @@ namespace DataBase
 
     public class SimpleItem : ISimpleItem
     {
+        public SimpleItem() { }
+
+        public SimpleItem(Item i)
+        {
+            ItemId = i.ItemId;
+            Ean = i.Ean;
+            Name = i.Name;
+            AverageLifespanDays = i.AverageLifespanDays;
+            DesiredMinimumAmount = i.DesiredMinimumAmount;
+            Size = i.Size;
+            SizeUnit = i.SizeUnit;
+
+        }
         public int ItemId { get; set; }
         public string Ean { get; set; }
         public string Name { get; set; }

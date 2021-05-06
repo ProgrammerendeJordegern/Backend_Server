@@ -33,10 +33,7 @@ namespace DataBase.Models
         public DateTime DateAdded { get; set; }
         public InventoryTypes InventoryType { get; set; }
 
-        public static implicit operator SimpleInventoryItem(InventoryItem v)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 
     public class InventoryItem
