@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using DataBase.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext Context;
+        protected readonly MyDbContext Context;
 
-        public Repository(DbContext context)
+        public Repository(MyDbContext context)
         {
             Context = context;
         }

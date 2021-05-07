@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,14 +32,12 @@ namespace ASPwebApp.Controllers
         /// <param name="userId">May be unneccesary in the future</param>
         /// /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns></returns>
-        [HttpGet("{userid}")]
-        [HttpGet("/all")]
-        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories(int? userId, [FromHeader] string? Authorization)
+        //[HttpGet("{userid}")]
+        [HttpGet]
+        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories([FromHeader] string? Authorization)
         {
-            string jwt = Authorization.Split(" ")[1];
-            var dbUser=await _context.User.Include(u=>u.PpUser).SingleAsync(u=>u.AccessJWTToken == jwt);
-            if (userId == null) userId = dbUser.PpUser.PpUserId;
-                var inventories = uow.Users.GetInventoriesWithUser((int)userId).ToList();
+            int userId =await uow.UserDb.GetPpUserIdByJWT(Authorization);
+            var inventories = uow.Users.GetInventoriesWithUser((int)userId).ToList();
             var inventoryItems = new List<SimpleInventoryItem>();
 
             //Combine 4 list to one list
@@ -55,16 +54,13 @@ namespace ASPwebApp.Controllers
         /// <summary>
         /// Get 1 inventory (fx Fridge)
         /// </summary>
-        /// <param name="userId">Måske snart unødvendig</param>
+        /// <param name="userId">OBS Removed</param>
         /// <param name="InventoryType">1:Freezer 2: Fridge 3: pantry 4: shopping list</param>
         /// <returns></returns>
-        [HttpGet("{userId}/{InventoryType}")]
-        public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int? userId, int? InventoryType)
+        [HttpGet("{InventoryType}")]
+        public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int InventoryType,[FromHeader] string Authorization)
         {
-            if (userId == null)
-            {
-                return BadRequest();
-            }
+            int userId =await uow.UserDb.GetPpUserIdByJWT(Authorization);
 
             Type convertedInventoryType;
             if (InventoryType == null) convertedInventoryType = typeof(Fridge);

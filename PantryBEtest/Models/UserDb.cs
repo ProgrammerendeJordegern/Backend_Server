@@ -9,13 +9,18 @@ namespace DataBase.Models
 {
     public class UserDb
     {
-        //public UserDb(string fn,string email)
-        //{
-        //    FullName = fn;
-        //    Email = email;
-        //    CreationDate = DateTime.Today;
-        //    PpUser = new PpUser();
-        //}
+        public UserDb()
+        {
+            PpUser = new PpUser();
+            CreationDate=DateTime.Now;
+        }
+        public UserDb(string fn, string email)
+        {
+            FullName = fn;
+            Email = email;
+            CreationDate = DateTime.Today;
+            PpUser = new PpUser();
+        }
 
 
         [Key] 
@@ -33,6 +38,7 @@ namespace DataBase.Models
         public string AccessJWTToken { get; set; }
 
         public PpUser PpUser { get; set; }
+        public int PpUserId { get; set; }
 
 
     }

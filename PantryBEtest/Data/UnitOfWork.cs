@@ -7,6 +7,7 @@ namespace DataBase.Data
     {
         IUserRepository Users { get; }
         IItemRepository Items { get; }
+        IUserDbRepository UserDb { get; }
         int Complete();
     }
     public class UnitOfWork : IUnitOfWork
@@ -18,11 +19,13 @@ namespace DataBase.Data
             _context = context;
             Users = new UserRepository(_context);
             Items = new ItemRepository(_context);
+            UserDb = new UserDbRepository(_context);
         }
 
 
         public IUserRepository Users { get; private set; }
         public IItemRepository Items { get; }
+        public IUserDbRepository UserDb { get; }
 
 
         public int Complete()

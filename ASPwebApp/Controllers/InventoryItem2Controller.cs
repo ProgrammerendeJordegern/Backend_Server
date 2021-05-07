@@ -16,15 +16,16 @@ namespace ASPwebApp.Controllers
     public class InventoryItem2Controller : ControllerBase
     {
         private readonly MyDbContext _context;
+        private readonly UnitOfWork uow;
 
         public InventoryItem2Controller(MyDbContext context)
         {
             _context = context;
-            UnitOfWork uow = new UnitOfWork(_context);
+            uow = new UnitOfWork(_context);
         }
        
         /// <summary>
-        /// get all inventory items containing this itemId
+        /// get all InventoryItems containing this itemId
         /// </summary>
         /// <param name="ItemId"></param>
         /// <returns></returns>
@@ -91,17 +92,19 @@ namespace ASPwebApp.Controllers
         /// <param name="inventoryItem"></param>
         /// <returns></returns>
         [HttpPost("existingItem/{userId}/{type}")]
-        public async Task<ActionResult> CreateWExistingItem(int? userId, int? type, [FromBody] SimpleInventoryItem? inventoryItem)
+        [HttpPost("existingItem/{type}")]
+        public async Task<ActionResult> CreateWExistingItem(int? userId, int? type, [FromBody] SimpleInventoryItem? inventoryItem,[FromHeader]string Authorization)
         {
             if (inventoryItem == null) return NoContent();
             Inventory inventory;
-            if (type != null && userId != null)
+            if (userId == null) userId =await uow.UserDb.GetPpUserIdByJWT(Authorization);
+            if (type != null)//Type supplied as parameter
             {
                 var uow = new UnitOfWork(_context);
                 inventory = uow.Users.GetInventoryWithUser((int)userId, PpUserController.FromEnumToType(type));
-
             }
-            else
+            else if (inventoryItem.InventoryId == null) return NotFound("No inventory type or id");
+            else//Type is embedded in json object
             {
                 inventory = await _context.Inventory.SingleAsync(i => i.InventoryId == inventoryItem.InventoryId);
             }
@@ -120,19 +123,23 @@ namespace ASPwebApp.Controllers
             return BadRequest();
 
         }
+
         /// <summary>
         /// Create a new InventoryItem AND a new Item
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="type">1-4</param>
         /// <param name="inventoryItem"></param>
+        /// <param name="Authorization">Token: "Bearer ehf3b4"</param>
         /// <returns></returns>
         [HttpPost("newItem/{userId}/{type}")]
-        public async Task<ActionResult> CreateWNewItem(int? userId, int? type, [FromBody] InventoryItem? inventoryItem)
+        [HttpPost("newItem/{type}")]
+        public async Task<ActionResult> CreateWNewItem(int? userId, int? type, [FromBody] InventoryItem? inventoryItem,[FromHeader]string Authorization)
         {
             if (inventoryItem == null) return NoContent();
             Inventory inventory = null;
-            if (userId != null && type != null)
+            if (userId == null) userId = await uow.UserDb.GetPpUserIdByJWT(Authorization);
+            if (type != null)
             {
                 var uow = new UnitOfWork(_context);
                 inventory = uow.Users.GetInventoryWithUser((int)userId, PpUserController.FromEnumToType(type));

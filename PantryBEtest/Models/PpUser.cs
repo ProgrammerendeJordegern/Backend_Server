@@ -13,12 +13,15 @@ namespace DataBase
         public PpUser()
         {
             Inventories = new List<Inventory>();
+        }
+        public PpUser(int withAParameter)
+        {
+            Inventories = new List<Inventory>();
             Inventories.Add(new Freezer());
             Inventories.Add(new Fridge());
             Inventories.Add(new Pantry());
             Inventories.Add(new ShoppingList());
         }
-
 
 
     }
