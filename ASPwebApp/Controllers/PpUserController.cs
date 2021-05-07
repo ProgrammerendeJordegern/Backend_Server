@@ -26,12 +26,12 @@ namespace ASPwebApp.Controllers
             uow = new UnitOfWork(context);
         }
 
-    
+
 
         // GET: PpUser
         public async Task<IActionResult> Index()
         {
-            
+
             return View(await _context.PpUser.ToListAsync());
         }
 
@@ -60,16 +60,17 @@ namespace ASPwebApp.Controllers
         //        return NotFound();
         //    }
 
-            var ppUser = uow.Users.GetUserWithEmail(email);
-            if (ppUser == null)
-            {
-                return NotFound();
-            }
+        //    var ppUser = uow.Users.GetUserWithEmail(email);
+        //        if (ppUser == null)
+        //        {
+        //            return NotFound();
+        //}
 
         //    return View(ppUser);
         //}
 
-        public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int? userId, int? InventoryType,[FromHeader]string username,[FromHeader] string password)
+        public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int? userId, int? InventoryType,
+            [FromHeader] string username, [FromHeader] string password)
         {
             if (username == "flemming") return Content("HAHAHA");
             if (userId == null)
@@ -79,7 +80,7 @@ namespace ASPwebApp.Controllers
             }
 
             Type convertedInventoryType;
-            if (InventoryType == null) convertedInventoryType=typeof(Fridge);
+            if (InventoryType == null) convertedInventoryType = typeof(Fridge);
             else
             {
                 convertedInventoryType = FromEnumToType(InventoryType);
@@ -92,13 +93,14 @@ namespace ASPwebApp.Controllers
             }
 
             //Remove unnecesary data:
-            string json="";
-            List < SimpleInventoryItem > listII= new List<SimpleInventoryItem>();
+            string json = "";
+            List<SimpleInventoryItem> listII = new List<SimpleInventoryItem>();
             foreach (var ii in inventory.ItemCollection)
             {
                 listII.Add(new SimpleInventoryItem(ii));
                 //json += JsonSerializer.Serialize( simpleInventoryItem);
             }
+
             return listII;
         }
 
@@ -136,6 +138,7 @@ namespace ASPwebApp.Controllers
                     inventoryItems.Add(simpleII);
                 }
             }
+
             return inventoryItems;
         }
 
@@ -152,7 +155,8 @@ namespace ASPwebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PpUserId,Email,Name,PasswordHash,CreationDate")] PpUser ppUser)
+        public async Task<IActionResult> Create([Bind("PpUserId,Email,Name,PasswordHash,CreationDate")]
+            PpUser ppUser)
         {
             if (ModelState.IsValid)
             {
@@ -160,6 +164,7 @@ namespace ASPwebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(ppUser);
         }
 
@@ -176,6 +181,7 @@ namespace ASPwebApp.Controllers
             {
                 return NotFound();
             }
+
             return View(ppUser);
         }
 
@@ -184,7 +190,8 @@ namespace ASPwebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PpUserId,Email,Name,PasswordHash,CreationDate")] PpUser ppUser)
+        public async Task<IActionResult> Edit(int id, [Bind("PpUserId,Email,Name,PasswordHash,CreationDate")]
+            PpUser ppUser)
         {
             if (id != ppUser.PpUserId)
             {
@@ -209,8 +216,10 @@ namespace ASPwebApp.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(ppUser);
         }
 
@@ -249,3 +258,4 @@ namespace ASPwebApp.Controllers
         }
     }
 }
+
