@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -79,21 +80,23 @@ namespace ASPwebApp.Controllers
         /// <summary>
         /// Get 1 item by name
         /// </summary>
-        /// <param name="name">Currently using "contains(ToLower)"</param>
+        /// <param name="name">this version is used like /api/item/byname/smør</param>
+        /// /// <param name="superName">this version is used like /api/item/byname?name=smør</param>
         /// <returns></returns>
         [HttpGet("byName/{name}")]
-        public async Task<ActionResult<SimpleItem>> FromName(string? name)
+        [HttpGet("byName")]
+        public async Task<ActionResult<SimpleItem>> FromName(string? superName,[FromQuery]string? name)
         {
-            if (name == null || name.Length < 3)
+            if (name == null && superName == null) return NotFound("Vi mangler et navn");
+            if (name == null )
             {
-                return NotFound();
+                name = superName;
             }
-            var item = uow.Items.SingleOrDefault(i =>
-                           i.Name.ToLower() == (name.ToLower()))
-                      ?? uow.Items.SingleOrDefault(i => //findes ikke et eksakt match, søges bredere:
-                          i.Name.ToLower().Contains(name.ToLower()));
-            //await _context.Item
-            //.FirstOrDefaultAsync(m => m.Name.Contains(name));//Contains may be changed to ==
+            var item = uow.Items.Find(i =>
+                           i.Name.ToLower() == (name.ToLower())).First()
+                      ?? uow.Items.Find(i => //findes ikke et eksakt match, søges bredere:
+                          i.Name.ToLower().Contains(name.ToLower())).First();
+            
             if (item == null)
             {
                 return NotFound();
@@ -107,7 +110,7 @@ namespace ASPwebApp.Controllers
         /// <summary>
         /// Edit details about item
         /// </summary>
-        /// <param name="newItem"></param>
+        /// <param name="newItem">item to be updated</param>
         /// <returns></returns>
         // GET: Item/Edit/5
         [HttpPut]
