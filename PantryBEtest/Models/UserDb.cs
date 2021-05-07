@@ -29,7 +29,7 @@ namespace DataBase.Models
         [MaxLength(64)] 
         public string PwHash { get; set; }
         public DateTime CreationDate { get; set; }
-
+        
         public string AccessJWTToken { get; set; }
 
         public PpUser PpUser { get; set; }
