@@ -100,13 +100,14 @@ namespace ASPwebApp.Controllers
 
         //Logout
         [HttpPost("logout")]
-        public async Task<OkObjectResult> Logout(UserDto logoutUser)
+        public async Task<OkObjectResult> Logout([FromHeader] string Authorization)
         {
-            logoutUser.Email = logoutUser.Email.ToLower();
+            string[] authorizationJwt = Authorization.Split(" ");
+            var JwtToken = authorizationJwt[1];
             var user = await _context.User.Where(u =>
-                u.Email == logoutUser.Email).FirstOrDefaultAsync();
+                u.AccessJWTToken == JwtToken).FirstOrDefaultAsync();
             user.AccessJWTToken = null;
-            logoutUser = null;
+            await _context.SaveChangesAsync();
             return Ok("Logout completed");
         }
 
