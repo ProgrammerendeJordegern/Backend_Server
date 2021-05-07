@@ -29,7 +29,7 @@ namespace ASPwebApp.Controllers
         /// <param name="userId">May be unneccesary in the future</param>
         /// <returns></returns>
         [HttpGet("{userid}")]
-        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories(int? userId)
+        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories(int? userId, [FromHeader] string Authorization)
         {
             if (userId == null) return BadRequest();
             var inventories = uow.Users.GetInventoriesWithUser((int)userId).ToList();

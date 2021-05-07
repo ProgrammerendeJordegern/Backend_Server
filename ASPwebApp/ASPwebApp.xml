@@ -4,7 +4,7 @@
         <name>ASPwebApp</name>
     </assembly>
     <members>
-        <member name="M:ASPwebApp.Controllers.Inventory2Controller.GetAllInventories(System.Nullable{System.Int32})">
+        <member name="M:ASPwebApp.Controllers.Inventory2Controller.GetAllInventories(System.Nullable{System.Int32},System.String)">
             <summary>
             Get a list of all inventoryItems for a user
             </summary>
