@@ -30,7 +30,7 @@ namespace ASPwebApp.Controllers
         private readonly MyDbContext _context;
         private readonly AppSettings _appSettings;
         private const int BcryptWorkFactor = 10;
-
+        
         public AccountsController(MyDbContext context, IOptions<AppSettings> appSettings)
         {
             _context = context;
@@ -60,7 +60,7 @@ namespace ASPwebApp.Controllers
         }
 
         //Get api/account/3
-        [HttpGet("{id}"), ActionName("Get")]
+        [HttpGet("{id}"), ActionName("Get"), Authorize]
         public async Task<ActionResult<UserDto>> Get(int id)
         {
             var user = await _context.User.FindAsync((long)id);
@@ -99,7 +99,8 @@ namespace ASPwebApp.Controllers
 
 
         //Logout
-        [HttpPost("logout")]
+
+        [HttpPost("logout"), Authorize]
         public async Task<OkObjectResult> Logout([FromHeader] string Authorization)
         {
             string[] authorizationJwt = Authorization.Split(" ");

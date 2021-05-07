@@ -8,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using DataBase;
 using DataBase.Data;
 using DataBase.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPwebApp.Controllers
 {
     [Route("api/Inventory")]
     [ApiController]
+    [Authorize]
     public class Inventory2Controller : ControllerBase
     {
         private readonly MyDbContext _context;
