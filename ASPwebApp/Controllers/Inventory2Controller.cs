@@ -29,12 +29,16 @@ namespace ASPwebApp.Controllers
         /// Get a list of all inventoryItems for a user
         /// </summary>
         /// <param name="userId">May be unneccesary in the future</param>
+        /// /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns></returns>
         [HttpGet("{userid}")]
-        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories(int? userId, [FromHeader] string Authorization)
+        [HttpGet("/all")]
+        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories(int? userId, [FromHeader] string? Authorization)
         {
-            if (userId == null) return BadRequest();
-            var inventories = uow.Users.GetInventoriesWithUser((int)userId).ToList();
+            string jwt = Authorization.Split(" ")[1];
+            var dbUser=await _context.User.Include(u=>u.PpUser).SingleAsync(u=>u.AccessJWTToken == jwt);
+            if (userId == null) userId = dbUser.PpUser.PpUserId;
+                var inventories = uow.Users.GetInventoriesWithUser((int)userId).ToList();
             var inventoryItems = new List<SimpleInventoryItem>();
 
             //Combine 4 list to one list

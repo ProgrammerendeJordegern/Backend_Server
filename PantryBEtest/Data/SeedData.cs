@@ -25,8 +25,13 @@ namespace DataBase.Data
 
             Inventory fridge = u1.PpUser.Inventories.ToList()[1];
 
-            //context.InventoryItem.Add();
+            foreach (var item in items)
+            {
+                fridge.ItemCollection.Add(new InventoryItem() { Amount = 2, DateAdded = DateTime.Now,Inventory = fridge,Item = item});
+            }
 
+             context.SaveChanges();
+            //                context.InventoryItem.Add(new InventoryItem(){Amount = 2,DateAdded = DateTime.Now});
 
 
             #endregion
