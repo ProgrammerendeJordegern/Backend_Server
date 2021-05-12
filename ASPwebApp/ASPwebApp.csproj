@@ -6,6 +6,8 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>~\ASPwebApp.xml</DocumentationFile>
+    <WarningsAsErrors>;NU1605</WarningsAsErrors>
+    <NoWarn>1701;1702;8632;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

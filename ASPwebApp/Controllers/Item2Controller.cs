@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataBase;
 using DataBase.Data;
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
 namespace ASPwebApp.Controllers
 {
@@ -62,7 +63,9 @@ namespace ASPwebApp.Controllers
         /// <param name="ean"></param>
         /// <returns></returns>
         [HttpGet("byEan/{ean}")]
+#pragma warning disable 8632
         public async Task<ActionResult<SimpleItem>> FromEan(string? ean)
+#pragma warning restore 8632
         {
             if (ean == null)
             {

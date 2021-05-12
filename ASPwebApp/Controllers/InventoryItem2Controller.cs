@@ -1,5 +1,7 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using DataBase;
@@ -84,16 +86,18 @@ namespace ASPwebApp.Controllers
             await _context.SaveChangesAsync();
             return Accepted();
         }
+
         /// <summary>
         /// Create a new inventoryItem, but NOT a new Item
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="type"></param>
         /// <param name="inventoryItem"></param>
+        /// <param name="Authorization">Token: "Bearer ehf3b4"</param>
         /// <returns></returns>
         [HttpPost("existingItem/{userId}/{type}")]
         [HttpPost("existingItem/{type}")]
-        public async Task<ActionResult> CreateWExistingItem(int? userId, int? type, [FromBody] SimpleInventoryItem? inventoryItem,[FromHeader]string Authorization)
+        public async Task<ActionResult> CreateWExistingItem(int? userId, [Required]int? type, [FromBody] SimpleInventoryItem? inventoryItem,[FromHeader]string Authorization)
         {
             if (inventoryItem == null) return NoContent();
             Inventory inventory;
@@ -103,7 +107,6 @@ namespace ASPwebApp.Controllers
                 var uow = new UnitOfWork(_context);
                 inventory = uow.Users.GetInventoryWithUser((int)userId, PpUserController.FromEnumToType(type));
             }
-            else if (inventoryItem.InventoryId == null) return NotFound("No inventory type or id");
             else//Type is embedded in json object
             {
                 inventory = await _context.Inventory.SingleAsync(i => i.InventoryId == inventoryItem.InventoryId);
@@ -137,7 +140,7 @@ namespace ASPwebApp.Controllers
         public async Task<ActionResult> CreateWNewItem(int? userId, int? type, [FromBody] InventoryItem? inventoryItem,[FromHeader]string Authorization)
         {
             if (inventoryItem == null) return NoContent();
-            Inventory inventory = null;
+            Inventory? inventory = null;
             if (userId == null) userId = await uow.UserDb.GetPpUserIdByJWT(Authorization);
             if (type != null)
             {
@@ -154,18 +157,20 @@ namespace ASPwebApp.Controllers
             return BadRequest();
 
         }
+
         /// <summary>
-        /// Auto generated Delete
+        /// Delete an inventory item (eg. when amount reached 0
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="itemId">itemId for the item</param>
+        /// <param name="dateTime">date to destinguish between II (time-part is ignored)</param>
+        /// <returns>202 accepted</returns>
         // DELETE: api/InventoryItem2/5
         [HttpDelete("{itemId}/{dateTime}")]
         public async Task<IActionResult> DeleteInventoryItem(int itemId,DateTime dateTime)
         {
             var inventoryItem = await _context.InventoryItem
                 .Where(i=>i.ItemId==itemId)
-                .Where(i=>i.DateAdded==dateTime).FirstAsync();
+                .Where(i=>i.DateAdded.Date==dateTime.Date).FirstOrDefaultAsync();
             if (inventoryItem == null)
             {
                 return NotFound("Vi kunne ikke finde elementet i databasen");

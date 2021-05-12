@@ -69,10 +69,8 @@ namespace ASPwebApp.Controllers
         //    return View(ppUser);
         //}
 
-        public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int? userId, int? InventoryType,
-            [FromHeader] string username, [FromHeader] string password)
+        public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int? userId, int? InventoryType)
         {
-            if (username == "flemming") return Content("HAHAHA");
             if (userId == null)
             {
                 return BadRequest();
@@ -93,7 +91,6 @@ namespace ASPwebApp.Controllers
             }
 
             //Remove unnecesary data:
-            string json = "";
             List<SimpleInventoryItem> listII = new List<SimpleInventoryItem>();
             foreach (var ii in inventory.ItemCollection)
             {

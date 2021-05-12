@@ -29,12 +29,11 @@ namespace ASPwebApp.Controllers
         /// <summary>
         /// Get a list of all inventoryItems for a user
         /// </summary>
-        /// <param name="userId">May be unneccesary in the future</param>
         /// /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns></returns>
-        //[HttpGet("{userid}")]
+        
         [HttpGet]
-        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories([FromHeader] string? Authorization)
+        public async Task<ActionResult<List<SimpleInventoryItem>>> GetAllInventories([FromHeader] string Authorization)
         {
             int userId =await uow.UserDb.GetPpUserIdByJWT(Authorization);
             var inventories = uow.Users.GetInventoriesWithUser((int)userId).ToList();
@@ -51,23 +50,20 @@ namespace ASPwebApp.Controllers
             }
             return inventoryItems;
         }
+
         /// <summary>
         /// Get 1 inventory (fx Fridge)
         /// </summary>
-        /// <param name="userId">OBS Removed</param>
         /// <param name="InventoryType">1:Freezer 2: Fridge 3: pantry 4: shopping list</param>
+        /// <param name="Authorization">JWT: "bearer eyegfs"</param>
         /// <returns></returns>
         [HttpGet("{InventoryType}")]
         public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int InventoryType,[FromHeader] string Authorization)
         {
             int userId =await uow.UserDb.GetPpUserIdByJWT(Authorization);
 
-            Type convertedInventoryType;
-            if (InventoryType == null) convertedInventoryType = typeof(Fridge);
-            else
-            {
-                convertedInventoryType = FromEnumToType(InventoryType);
-            }
+            Type convertedInventoryType = FromEnumToType(InventoryType);
+            
 
             var inventory = uow.Users.GetInventoryWithUser((int)userId, convertedInventoryType);
             if (inventory == null)
