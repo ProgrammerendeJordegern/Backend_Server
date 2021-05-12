@@ -30,14 +30,14 @@ namespace DataBase.Data
             Inventory freezerU1 = u1.PpUser.Inventories.ToList()[0];
             foreach (var item in freezerItems)
             {
-                freezerU1.ItemCollection.Add(new InventoryItem() { Amount = 3, DateAdded = DateTime.Now, Inventory = fridge, Item = item });
+                freezerU1.ItemCollection.Add(new InventoryItem() { Amount = 3, DateAdded = DateTime.Now, Inventory = freezerU1, Item = item });
             }
 
             //Fridge
             Inventory fridgeU1 = u1.PpUser.Inventories.ToList()[1];
             foreach (var item in fridgeItems)
             {
-                fridgeU1.ItemCollection.Add(new InventoryItem() { Amount = 2, DateAdded = DateTime.Now, Inventory = fridge, Item = item });
+                fridgeU1.ItemCollection.Add(new InventoryItem() { Amount = 2, DateAdded = DateTime.Now, Inventory = fridgeU1, Item = item });
             }
 
 
@@ -45,14 +45,14 @@ namespace DataBase.Data
             Inventory pantryU1 = u1.PpUser.Inventories.ToList()[2];
             foreach (var item in pantryItems)
             {
-                pantryU1.ItemCollection.Add(new InventoryItem() { Amount = 1, DateAdded = DateTime.Now, Inventory = fridge, Item = item });
+                pantryU1.ItemCollection.Add(new InventoryItem() { Amount = 1, DateAdded = DateTime.Now, Inventory = pantryU1, Item = item });
             }
 
             //Shoppinglist
             Inventory shoppinglistU1 = u1.PpUser.Inventories.ToList()[3];
             foreach (var item in fridgeItems)
             {
-                shoppinglistU1.ItemCollection.Add(new InventoryItem() { Amount = 4, DateAdded = DateTime.Now, Inventory = fridge, Item = item });
+                shoppinglistU1.ItemCollection.Add(new InventoryItem() { Amount = 4, DateAdded = DateTime.Now, Inventory = shoppinglistU1, Item = item });
             }
 
             context.SaveChanges();
@@ -69,14 +69,14 @@ namespace DataBase.Data
             Inventory freezerU2 = u2.PpUser.Inventories.ToList()[0];
             foreach (var item in freezerItems)
             {
-                freezerU2.ItemCollection.Add(new InventoryItem() { Amount = 3, DateAdded = DateTime.Now, Inventory = fridge, Item = item });
+                freezerU2.ItemCollection.Add(new InventoryItem() { Amount = 3, DateAdded = DateTime.Now, Inventory = freezerU2, Item = item });
             }
 
             //Fridge
             Inventory fridgeU2 = u2.PpUser.Inventories.ToList()[1];
             foreach (var item in fridgeItems)
             {
-                fridgeU2.ItemCollection.Add(new InventoryItem() { Amount = 2, DateAdded = DateTime.Now, Inventory = fridge, Item = item });
+                fridgeU2.ItemCollection.Add(new InventoryItem() { Amount = 2, DateAdded = DateTime.Now, Inventory = fridgeU2, Item = item });
             }
 
 
@@ -84,14 +84,14 @@ namespace DataBase.Data
             Inventory pantryU2 = u2.PpUser.Inventories.ToList()[2];
             foreach (var item in pantryItems)
             {
-                pantryU2.ItemCollection.Add(new InventoryItem() { Amount = 1, DateAdded = DateTime.Now, Inventory = fridge, Item = item });
+                pantryU2.ItemCollection.Add(new InventoryItem() { Amount = 1, DateAdded = DateTime.Now, Inventory = pantryU2, Item = item });
             }
 
             //Shoppinglist
             Inventory shoppinglistU2 = u2.PpUser.Inventories.ToList()[3];
             foreach (var item in fridgeItems)
             {
-                shoppinglistU2.ItemCollection.Add(new InventoryItem() { Amount = 4, DateAdded = DateTime.Now, Inventory = fridge, Item = item });
+                shoppinglistU2.ItemCollection.Add(new InventoryItem() { Amount = 4, DateAdded = DateTime.Now, Inventory = shoppinglistU2, Item = item });
             }
 
             context.SaveChanges();
