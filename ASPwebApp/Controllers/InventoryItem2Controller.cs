@@ -144,7 +144,6 @@ namespace ASPwebApp.Controllers
             if (userId == null) userId = await uow.UserDb.GetPpUserIdByJWT(Authorization);
             if (type != null)
             {
-                var uow = new UnitOfWork(_context);
                 inventory = uow.Users.GetInventoryWithUser((int)userId, PpUserController.FromEnumToType(type));
             }
             //else inventory = await _context.Inventory.SingleAsync(i => i.InventoryId == inventoryItem.InventoryId);
@@ -166,19 +165,15 @@ namespace ASPwebApp.Controllers
         /// <returns>202 accepted</returns>
         // DELETE: api/InventoryItem2/5
         [HttpDelete("{itemId}/{dateTime}")]
-        public async Task<IActionResult> DeleteInventoryItem(int itemId,DateTime dateTime)
+        public async Task<IActionResult> DeleteInventoryItem(int itemId,DateTime dateTime,[FromHeader]string Authorization)
         {
-            var inventoryItem = await _context.InventoryItem
-                .Where(i=>i.ItemId==itemId)
-                .Where(i=>i.DateAdded.Date==dateTime.Date).FirstOrDefaultAsync();
-            if (inventoryItem == null)
+            var inventoryItemIds=await uow.UserDb.GetInventoryIdsByJwt(Authorization);
+            var succeeded = await uow.InventoryItems.Delete(itemId, dateTime, inventoryItemIds);
+            if (!succeeded)
             {
                 return NotFound("Vi kunne ikke finde elementet i databasen");
             }
-
-            _context.InventoryItem.Remove(inventoryItem);
-            await _context.SaveChangesAsync();
-
+            
             return Accepted();
         }
 

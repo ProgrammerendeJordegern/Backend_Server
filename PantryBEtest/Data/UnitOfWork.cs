@@ -8,6 +8,8 @@ namespace DataBase.Data
         IUserRepository Users { get; }
         IItemRepository Items { get; }
         IUserDbRepository UserDb { get; }
+        IInventoryItemRepository InventoryItems { get; }
+        IInventoryRepository Inventories { get; }
         int Complete();
     }
     public class UnitOfWork : IUnitOfWork
@@ -20,12 +22,16 @@ namespace DataBase.Data
             Users = new UserRepository(_context);
             Items = new ItemRepository(_context);
             UserDb = new UserDbRepository(_context);
+            Inventories = new InventoryRepository(_context);
+            InventoryItems = new InventoryItemRepository(_context);
         }
 
 
         public IUserRepository Users { get; private set; }
         public IItemRepository Items { get; }
         public IUserDbRepository UserDb { get; }
+        public IInventoryItemRepository InventoryItems { get; }
+        public IInventoryRepository Inventories { get; }
 
 
         public int Complete()

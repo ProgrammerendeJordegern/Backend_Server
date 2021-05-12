@@ -12,7 +12,6 @@ namespace DataBase
         //Constructor
         public PpUser()
         {
-            Inventories = new List<Inventory>();
         }
         public PpUser(int withAParameter)
         {
