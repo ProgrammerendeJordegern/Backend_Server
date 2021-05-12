@@ -160,13 +160,14 @@ namespace ASPwebApp.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         // DELETE: api/InventoryItem2/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInventoryItem(int id)
+        [HttpDelete("{itemId}/{dateTime}")]
+        public async Task<IActionResult> DeleteInventoryItem(int itemId,DateTime dateTime)
         {
-            var inventoryItem = await _context.InventoryItem.FindAsync(id);
+            var inventoryItem = await _context.InventoryItem.Where(i=>i.ItemId==itemId)
+                .Where(i=>i.DateAdded==dateTime).SingleAsync();
             if (inventoryItem == null)
             {
-                return NotFound();
+                return NotFound("Vi kunne ikke finde elementet i databasen");
             }
 
             _context.InventoryItem.Remove(inventoryItem);
