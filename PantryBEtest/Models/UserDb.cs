@@ -19,7 +19,7 @@ namespace DataBase.Models
             FullName = fn;
             Email = email;
             CreationDate = DateTime.Today;
-            PpUser = new PpUser();
+            PpUser = new PpUser(2);
         }
 
 

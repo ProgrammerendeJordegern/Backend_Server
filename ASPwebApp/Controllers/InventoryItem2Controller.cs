@@ -163,8 +163,9 @@ namespace ASPwebApp.Controllers
         [HttpDelete("{itemId}/{dateTime}")]
         public async Task<IActionResult> DeleteInventoryItem(int itemId,DateTime dateTime)
         {
-            var inventoryItem = await _context.InventoryItem.Where(i=>i.ItemId==itemId)
-                .Where(i=>i.DateAdded==dateTime).SingleAsync();
+            var inventoryItem = await _context.InventoryItem
+                .Where(i=>i.ItemId==itemId)
+                .Where(i=>i.DateAdded==dateTime).FirstAsync();
             if (inventoryItem == null)
             {
                 return NotFound("Vi kunne ikke finde elementet i databasen");
