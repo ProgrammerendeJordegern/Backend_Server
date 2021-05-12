@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20210414110951_req")]
-    partial class req
+    [Migration("20210512113322_inventoryItemId")]
+    partial class inventoryItemId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -67,6 +67,9 @@ namespace DataBase.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("SizeUnit")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ItemId");
 
                     b.ToTable("Item");
@@ -80,17 +83,55 @@ namespace DataBase.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<long>("Amount")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("InventoryId", "ItemId");
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("InventoryItemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InventoryId", "ItemId", "DateAdded");
 
                     b.HasIndex("ItemId");
 
                     b.ToTable("InventoryItem");
+                });
+
+            modelBuilder.Entity("DataBase.Models.UserDb", b =>
+                {
+                    b.Property<long>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccessJWTToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
+
+                    b.Property<string>("FullName")
+                        .HasMaxLength(96)
+                        .HasColumnType("nvarchar(96)");
+
+                    b.Property<int>("PpUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PwHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("PpUserId");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("DataBase.PpUser", b =>
@@ -99,21 +140,6 @@ namespace DataBase.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PpUserId");
 
@@ -172,6 +198,17 @@ namespace DataBase.Migrations
                     b.Navigation("Inventory");
 
                     b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("DataBase.Models.UserDb", b =>
+                {
+                    b.HasOne("DataBase.PpUser", "PpUser")
+                        .WithMany()
+                        .HasForeignKey("PpUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PpUser");
                 });
 
             modelBuilder.Entity("DataBase.Inventory", b =>

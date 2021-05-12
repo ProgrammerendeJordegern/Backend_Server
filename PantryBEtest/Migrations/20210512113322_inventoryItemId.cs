@@ -2,23 +2,23 @@
 
 namespace DataBase.Migrations
 {
-    public partial class inheritanceInventory2 : Migration
+    public partial class inventoryItemId : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Discriminator",
-                table: "Inventory",
-                type: "nvarchar(max)",
+            migrationBuilder.AddColumn<int>(
+                name: "InventoryItemId",
+                table: "InventoryItem",
+                type: "int",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: 0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Discriminator",
-                table: "Inventory");
+                name: "InventoryItemId",
+                table: "InventoryItem");
         }
     }
 }

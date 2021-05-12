@@ -11,7 +11,12 @@ namespace DataBase
     {
         static void Main(string[] args)
         {
-        //    Console.WriteLine("Welcome to Pantry Passion Backend Server.");
+            using (var context = new MyDbContext())
+            {
+                context.Database.EnsureCreated();
+                new SeedData(context);
+            }
+            //    Console.WriteLine("Welcome to Pantry Passion Backend Server.");
 
         //    using (var context = new MyDbContext())
         //    {

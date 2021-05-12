@@ -81,13 +81,16 @@ namespace DataBase.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<long>("Amount")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("InventoryId", "ItemId");
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("InventoryItemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InventoryId", "ItemId", "DateAdded");
 
                     b.HasIndex("ItemId");
 
@@ -115,42 +118,7 @@ namespace DataBase.Migrations
                         .HasMaxLength(96)
                         .HasColumnType("nvarchar(96)");
 
-                    b.Property<int?>("PpUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PwHash")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.HasKey("UserId");
-
-                    b.HasIndex("PpUserId");
-
-                    b.ToTable("User");
-                });
-
-            modelBuilder.Entity("DataBase.PpUser", b =>
-                {
-                    b.Property<long>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AccessJWTToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(254)
-                        .HasColumnType("nvarchar(254)");
-
-                    b.Property<string>("FullName")
-                        .HasMaxLength(96)
-                        .HasColumnType("nvarchar(96)");
-
-                    b.Property<int?>("PpUserId")
+                    b.Property<int>("PpUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("PwHash")
@@ -234,7 +202,9 @@ namespace DataBase.Migrations
                 {
                     b.HasOne("DataBase.PpUser", "PpUser")
                         .WithMany()
-                        .HasForeignKey("PpUserId");
+                        .HasForeignKey("PpUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("PpUser");
                 });

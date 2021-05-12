@@ -46,6 +46,7 @@ namespace DataBase.Models
             this.ItemId=s.ItemId;
             this.Amount = s.Amount;
         }
+        public int InventoryItemId { get; set; }
         [Required]
         public int ItemId { get; set; }
         [Required]
