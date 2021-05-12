@@ -14,7 +14,7 @@ namespace DataBase
             using (var context = new MyDbContext())
             {
                 context.Database.EnsureCreated();
-                new SeedData(context);
+                var s1=new SeedData(context);
             }
             //    Console.WriteLine("Welcome to Pantry Passion Backend Server.");
 

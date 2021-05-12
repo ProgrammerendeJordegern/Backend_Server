@@ -109,7 +109,7 @@ namespace DataBase.Data
             {
                 FullName = "Kurt Kurtsen",
                 Email = "Kurt@kurt.com",
-                PpUser = new PpUser(),
+                PpUser = new PpUser(2),
                 CreationDate = DateTime.Today,
                 //Password = KurtLovesPP1!
                 PwHash = HashPassword("KurtLovesPP1!", BcryptWorkFactor)
@@ -119,7 +119,7 @@ namespace DataBase.Data
             {
                 FullName = "Bodil Bodilsen",
                 Email = "Bodil@bodil.com",
-                PpUser = new PpUser(),
+                PpUser = new PpUser(2),
                 CreationDate = DateTime.Today,
                 //Password = BodilLovesPP1!
                 PwHash = HashPassword("BodilLovesPP1!", BcryptWorkFactor)
@@ -127,7 +127,7 @@ namespace DataBase.Data
 
             context.Add(u1);
             context.Add(u2);
-            context.SaveChangesAsync();
+            context.SaveChanges();
             Console.WriteLine("Added 2 users: Kurt and Bodil");
 
             List<UserDb> users = new List<UserDb>();
