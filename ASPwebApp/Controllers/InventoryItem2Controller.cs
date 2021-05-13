@@ -123,6 +123,7 @@ namespace ASPwebApp.Controllers
             var item = await _context.Item.SingleAsync(i => i.ItemId == inventoryItem.ItemId);
             if (item == null) return BadRequest();
 
+            //If mathcing item allready is added today - increment the existing:
             var IIattempt=await uow.InventoryItems.TryGetTodayIinventoryItem(inventory.InventoryId, item.ItemId);
             if (IIattempt != null)
             {
@@ -130,6 +131,7 @@ namespace ASPwebApp.Controllers
                 uow.Complete();
                 return Ok("InventoryItem allerede oprettet i dag. den er opdateret");
             }
+            //Else: create new inventory item:
             var completeInventoryItem = new InventoryItem(inventoryItem);
             completeInventoryItem.Item = item;
             completeInventoryItem.ItemId = item.ItemId;

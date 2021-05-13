@@ -98,84 +98,25 @@ namespace ASPwebApp.Controllers
             }
         }
 
-        //// GET: api/Inventory2
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Inventory>>> GetInventory()
-        //{
-        //    return await _context.Inventory.ToListAsync();
-        //}
+        [HttpDelete("allContent/{type}")]
+        public async Task<ActionResult> DeleteAllContentInAnInventory(int type, [FromHeader] string Authorization)
+        {
+            var convertedType = FromEnumToType(type);
+            var ids = await uow.UserDb.GetInventoryIdsByJwt(Authorization);
+            Inventory inventory = null;
+            foreach (var id in ids)
+            {
+                var tempInv=uow.Inventories.Get(id);
+                if (tempInv.GetType() == convertedType) inventory = tempInv;
+            }
 
-        //// GET: api/Inventory2/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Inventory>> GetInventory(int id)
-        //{
-        //    var inventory = await _context.Inventory.FindAsync(id);
+            if (inventory == null) return NotFound("Vi kunne ikke finde et inventory");
+            _context.RemoveRange(_context.InventoryItem.Where(ii=>ii.InventoryId==inventory.InventoryId));
+            _context.SaveChanges();
 
-        //    if (inventory == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return inventory;
-        //}
-
-        //// PUT: api/Inventory2/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutInventory(int id, Inventory inventory)
-        //{
-        //    if (id != inventory.InventoryId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(inventory).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!InventoryExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        //// POST: api/Inventory2
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Inventory>> PostInventory(Inventory inventory)
-        //{
-        //    _context.Inventory.Add(inventory);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetInventory", new { id = inventory.InventoryId }, inventory);
-        //}
-
-        //// DELETE: api/Inventory2/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteInventory(int id)
-        //{
-        //    var inventory = await _context.Inventory.FindAsync(id);
-        //    if (inventory == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Inventory.Remove(inventory);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
+            uow.Complete();
+            return Ok("Elementerne er slettet");
+        }
 
         private bool InventoryExists(int id)
         {
