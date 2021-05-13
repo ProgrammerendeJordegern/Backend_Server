@@ -54,8 +54,8 @@ namespace ASPwebApp.Controllers
                     return InventoryTypes.Pantry;
                 case ShoppingList shoppingList:
                     return InventoryTypes.ShoppingList;
-               default:
-                    return InventoryTypes.All;
+                default:
+                    throw new Exception("Could not convert inventory type to enum.");
             }
         }
 

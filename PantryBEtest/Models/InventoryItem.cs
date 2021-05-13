@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-public enum InventoryTypes { All,Freezer,Fridge,Pantry,ShoppingList}
+public enum InventoryTypes {Freezer,Fridge,Pantry,ShoppingList}
 namespace DataBase.Models
 {
     public interface ISimpleInventoryItem
