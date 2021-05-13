@@ -93,8 +93,6 @@ namespace ASPwebApp.Controllers
                     return typeof(Pantry);
                 case InventoryTypes.ShoppingList:
                     return typeof(ShoppingList);
-                case InventoryTypes.All:
-                    return typeof(ShoppingList);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(InventoryType), InventoryType, null);
             }

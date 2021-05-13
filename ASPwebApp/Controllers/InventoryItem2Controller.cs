@@ -65,7 +65,7 @@ namespace ASPwebApp.Controllers
                 case ShoppingList shoppingList:
                     return InventoryTypes.ShoppingList;
                 default:
-                    return InventoryTypes.All;
+                    throw new Exception("Wrong inventory type chosen");
             }
         }
         /// <summary>
