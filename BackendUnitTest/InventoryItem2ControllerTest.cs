@@ -8,6 +8,7 @@ using DataBase;
 using DataBase.Data;
 using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 
 namespace BackendUnitTest
 {
@@ -28,12 +29,35 @@ namespace BackendUnitTest
             user.AccessJWTToken = jwt;
             dbc.SaveChanges();
         }
+        [Test]
+        public async Task CreateWNewItem__IIisCreated()
+        {
+            try
+            {
+                var ii = new InventoryItem()
+                {
+                    Amount = 3,
+                    Item = new Item()
+                    {
+                        Name = "juice",
+                        AverageLifespanDays = 3
+                    }
+                };
+                await uut.CreateWNewItem(null, 1, ii, "Bearer " + jwt);
+                var item=dbc.Item.Single(i => i.Name == "juice");
+                Assert.That(item.AverageLifespanDays, Is.EqualTo(3));
 
+            }
+            finally
+            {
+                await dbc.Database.EnsureDeletedAsync();
+                await dbc.DisposeAsync();
+            }
+        }
         [Test]
         public async Task CreateWExistingItem_II_already_Created_tody_originalIsIncemted()
         {
             
-           
             try
             {
                 //uut.CreateWNewItem(null, 1, ii, "Bearer " + jwt);
@@ -48,6 +72,49 @@ namespace BackendUnitTest
                 Assert.That(result1.Value.Count, Is.EqualTo(2));//Two II already exists with seed data
                 Assert.That(result1.Value[0].Amount,Is.EqualTo(8));
 
+            }
+            finally
+            {
+                dbc.Database.EnsureDeleted();
+                dbc.Dispose();
+            }
+        }
+        [Test]
+        public async Task Get_DataIsSeed_ResultIsOk()
+        {
+
+            try
+            {
+                var result = await uut.Get(1,"Bearer "+jwt);
+                //uut.CreateWNewItem(null, 1, ii, "Bearer " + jwt);
+                
+                Assert.That(result.Value.Count, Is.EqualTo(2));
+                Assert.That(result.Value[0].Item.Name,Is.EqualTo("Agurk"));
+                Assert.That(result.Value[0].Amount, Is.EqualTo(2));
+            }
+            finally
+            {
+                dbc.Database.EnsureDeleted();
+                dbc.Dispose();
+            }
+        }
+        [TestCase((uint.MinValue))]
+        [TestCase((uint)0)]
+        [TestCase((uint)1)]
+        public async Task Edit_DataIsSeed_AmountIsUpdated(uint amount)
+        {
+            try
+            {
+                var ii = new InventoryItem()
+                {
+                    ItemId = 1,
+                    InventoryId = 2,
+                    Amount = amount
+                };
+                var result = await uut.Edit(ii);
+                var get = await uut.Get(1, "Bearer " + jwt);
+               
+                Assert.That(get.Value[0].Amount, Is.EqualTo(amount));
             }
             finally
             {

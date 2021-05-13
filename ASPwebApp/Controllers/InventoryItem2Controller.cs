@@ -85,9 +85,22 @@ namespace ASPwebApp.Controllers
         public async Task<ActionResult> Edit([FromBody] InventoryItem inventoryItemFromClient)
         {
             if (inventoryItemFromClient == null) return BadRequest();
+            if (inventoryItemFromClient.ItemId == null)
+                inventoryItemFromClient.ItemId = inventoryItemFromClient.Item.ItemId;
             InventoryItem inventoryItemFromDb = await _context.InventoryItem
-                .SingleAsync(i => i.InventoryId == inventoryItemFromClient.InventoryId && i.ItemId == inventoryItemFromClient.ItemId);
-            if (inventoryItemFromDb == null) return NotFound();
+                .Where(i => i.InventoryId == inventoryItemFromClient.InventoryId)
+                .Where(i=> i.ItemId == inventoryItemFromClient.ItemId)
+                .SingleOrDefaultAsync();
+            if (inventoryItemFromDb == null)//Try again, but without date
+            {
+                inventoryItemFromDb=await _context.InventoryItem
+                    .Where(i => i.InventoryId == inventoryItemFromClient.InventoryId)
+                    .Where(i => i.ItemId == inventoryItemFromClient.ItemId)
+                    .Where(i => i.DateAdded.Date == inventoryItemFromClient.DateAdded.Date)
+                    .FirstOrDefaultAsync();
+            } 
+                
+              if(inventoryItemFromDb==null)  return NotFound();
             //Manuel update database amount
             inventoryItemFromDb.Amount = inventoryItemFromClient.Amount;
             _context.Update(inventoryItemFromDb);
