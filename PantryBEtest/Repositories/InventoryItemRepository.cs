@@ -11,8 +11,9 @@ namespace DataBase.Repositories
 {
     public interface IInventoryItemRepository : IRepository<InventoryItem>
     {
-        public Task<InventoryItem> Get(int itemId, DateTime date, int[] inventoryItemIds);
+        public InventoryItem Get(int itemId, DateTime date, int[] inventoryItemIds);
         public Task<bool> Delete(int itemId, DateTime date,int[] inventoryItemIds);
+        Task<InventoryItem> TryGetTodayIinventoryItem(int inventoryInventoryId, int itemItemId);
     }
 
 
@@ -28,7 +29,7 @@ namespace DataBase.Repositories
         }
 
 
-        public async Task<InventoryItem> Get(int itemId, DateTime date, int[] inventoryItemIds)
+        public InventoryItem Get(int itemId, DateTime date, int[] inventoryItemIds)
         {
             var inventories = PlutoContext.InventoryItem
                 .Where(i => i.ItemId == itemId)
@@ -51,7 +52,7 @@ namespace DataBase.Repositories
 
         public async Task<bool> Delete(int itemId, DateTime date,int[] inventoryItemIds)
         {
-            var inventoryItem = await Get(itemId, date, inventoryItemIds);
+            var inventoryItem =  Get(itemId, date, inventoryItemIds);
             if (inventoryItem == null)
             {
                 return false;
@@ -61,6 +62,14 @@ namespace DataBase.Repositories
             await PlutoContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<InventoryItem> TryGetTodayIinventoryItem(int inventoryInventoryId, int itemItemId)
+        {
+            return await PlutoContext.InventoryItem
+                .Where(i => i.ItemId == itemItemId)
+                .Where(ii => ii.InventoryId == inventoryInventoryId)
+                .Where(ii => ii.DateAdded.Date == DateTime.Now.Date).SingleOrDefaultAsync();
         }
     }
 }

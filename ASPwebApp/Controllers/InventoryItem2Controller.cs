@@ -29,22 +29,30 @@ namespace ASPwebApp.Controllers
         /// <summary>
         /// get all InventoryItems containing this itemId
         /// </summary>
-        /// <param name="ItemId"></param>
+        /// <param name="itemId"></param>
         /// <returns></returns>
         // GET: InventoryItem/get?
         [HttpGet("{ItemId}")]
-        public async Task<ActionResult<List<SimpleInventoryItem>>> Get(int? ItemId)
+        public async Task<ActionResult<List<SimpleInventoryItem>>> Get(int? itemId,[FromHeader] string Authorization)
         {
-            if (ItemId == null) return BadRequest();
-            if (_context.InventoryItem.Any(ii => ii.ItemId == ItemId) == false) return NotFound();
-            var inIt = await _context.InventoryItem
-                .Include(ii => ii.Item)
-                .Include(ii => ii.Inventory)
-                .Where(ii => ii.ItemId == ItemId).ToListAsync();
-            if (inIt == null) return NotFound();
+            var ids=await uow.UserDb.GetInventoryIdsByJwt(Authorization);
+            if (itemId == null) return BadRequest();
+            if (_context.InventoryItem.Any(ii => ii.ItemId == itemId) == false) return NotFound();
+            var inIts = new List<InventoryItem>();
+            foreach (var id in ids)
+            {
+                var inIt= await _context.InventoryItem
+                    .Include(ii => ii.Item)
+                    .Include(ii => ii.Inventory)
+                    .Where(ii => ii.ItemId == itemId)
+                    .Where(ii => ii.InventoryId ==id).FirstOrDefaultAsync();
+                if(inIt!=null)inIts.Add(inIt);
+            }
+            
+            if (inIts == null) return NotFound();
             //Copy content into simple class (JSON converter complains about too many references)
             List<SimpleInventoryItem> simpleList = new List<SimpleInventoryItem>();
-            foreach (var ii in inIt)
+            foreach (var ii in inIts)
             {
                 simpleList.Add(new SimpleInventoryItem(ii) { InventoryType = ConvertTypeToEnum(ii.Inventory) });
 
@@ -90,10 +98,10 @@ namespace ASPwebApp.Controllers
         /// <summary>
         /// Create a new inventoryItem, but NOT a new Item
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="type"></param>
+        /// <param name="userId">Forsvinder snart</param>
+        /// <param name="type">0: freezer 1:Fridge 2:Pantry 3: Shopping</param>
         /// <param name="inventoryItem"></param>
-        /// <param name="Authorization">Token: "Bearer ehf3b4"</param>
+        /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns></returns>
         [HttpPost("existingItem/{userId}/{type}")]
         [HttpPost("existingItem/{type}")]
@@ -114,6 +122,14 @@ namespace ASPwebApp.Controllers
             if (inventory == null) return BadRequest();
             var item = await _context.Item.SingleAsync(i => i.ItemId == inventoryItem.ItemId);
             if (item == null) return BadRequest();
+
+            var IIattempt=await uow.InventoryItems.TryGetTodayIinventoryItem(inventory.InventoryId, item.ItemId);
+            if (IIattempt != null)
+            {
+                IIattempt.Amount += inventoryItem.Amount;
+                uow.Complete();
+                return Ok("InventoryItem allerede oprettet i dag. den er opdateret");
+            }
             var completeInventoryItem = new InventoryItem(inventoryItem);
             completeInventoryItem.Item = item;
             completeInventoryItem.ItemId = item.ItemId;
@@ -131,9 +147,9 @@ namespace ASPwebApp.Controllers
         /// Create a new InventoryItem AND a new Item
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="type">1-4</param>
+        /// <param name="type">0-3</param>
         /// <param name="inventoryItem"></param>
-        /// <param name="Authorization">Token: "Bearer ehf3b4"</param>
+        /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns></returns>
         [HttpPost("newItem/{userId}/{type}")]
         [HttpPost("newItem/{type}")]
@@ -162,6 +178,7 @@ namespace ASPwebApp.Controllers
         /// </summary>
         /// <param name="itemId">itemId for the item</param>
         /// <param name="dateTime">date to destinguish between II (time-part is ignored)</param>
+        /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns>202 accepted</returns>
         // DELETE: api/InventoryItem2/5
         [HttpDelete("{itemId}/{dateTime}")]

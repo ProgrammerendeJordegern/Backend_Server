@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net.Mail;
 using System.Runtime.InteropServices.ComTypes;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using DataBase;
 using DataBase.Data;
@@ -41,22 +42,38 @@ namespace BackendUnitTest
                 dbc.Dispose();
             }
         }
-        //[Test]
-        //public void GetUserWithEmail_WithSeedData_CheckFridgeSize()
-        //{
-        //    try
-        //    {
-        //        DataBase.Program.AddDummyData(new MyDbContext(new DbContextOptions<MyDbContext>()));
-        //        var user = uow.Users.GetUserWithEmail("mail@mail.dk");
-                
-        //        Assert.That(user.Email, Is.EqualTo("mail@mail.dk"));
-        //    }
-        //    finally
-        //    {
-        //        dbc.Database.EnsureDeleted();
-        //        dbc.Dispose();
-        //    }
-        //}
+        [Test]
+        public async  Task InventoryItem_Delete_ReturnTrue()
+        {
+            try
+            {
+                new SeedData(dbc);
+                var ids = new int[6] {1, 2, 3, 4, 5, 6};
+                var result =await uow.InventoryItems.Delete(1,DateTime.Now,ids);
+
+                Assert.True(result);
+            }
+            finally
+            {
+                dbc.Database.EnsureDeleted();
+                dbc.Dispose();
+            }
+        }
+        [Test]
+        public async Task InventoryItem_TryGetTodayIinventoryItem_ReturnII()
+        {
+            try
+            {
+                new SeedData(dbc);
+                var ii = await uow.InventoryItems.TryGetTodayIinventoryItem(1, 6);
+                Assert.True(ii!=null);
+            }
+            finally
+            {
+                dbc.Database.EnsureDeleted();
+                dbc.Dispose();
+            }
+        }
         [Test]
         public void GetInventoriesWithUser_WithSeedData_CheckFridgeSize()
         {
@@ -75,22 +92,23 @@ namespace BackendUnitTest
             }
         }
 
-        [Test]
-        public void UOW_WithSeedData_CheckItemsCorrect()
-        {
-            try
-            {
-                //DataBase.Program.AddDummyData(new MyDbContext(new DbContextOptions<MyDbContext>()));
-                var user = uow.Users.Get(1);
-                var fridge = uow.Users.GetInventoryWithUser(user.PpUserId,typeof(Fridge));
-                Assert.That(fridge.ItemCollection.Count, Is.EqualTo(3));
-            }
-            finally
-            {
-                dbc.Database.EnsureDeleted();
-                dbc.Dispose();
-            }
-        }
+
+        //[Test]
+        //public void UOW_WithSeedData_CheckItemsCorrect()
+        //{
+        //    try
+        //    {
+        //        //DataBase.Program.AddDummyData(new MyDbContext(new DbContextOptions<MyDbContext>()));
+        //        var user = uow.Users.Get(1);
+        //        var fridge = uow.Users.GetInventoryWithUser(user.PpUserId,typeof(Fridge));
+        //        Assert.That(fridge.ItemCollection.Count, Is.EqualTo(3));
+        //    }
+        //    finally
+        //    {
+        //        dbc.Database.EnsureDeleted();
+        //        dbc.Dispose();
+        //    }
+        //}
         //[Test]
         //public void UOW_AddUser_WithSeedData_CheckUserCorrect()
         //{

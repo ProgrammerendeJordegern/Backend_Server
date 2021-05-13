@@ -54,8 +54,8 @@ namespace ASPwebApp.Controllers
         /// <summary>
         /// Get 1 inventory (fx Fridge)
         /// </summary>
-        /// <param name="InventoryType">1:Freezer 2: Fridge 3: pantry 4: shopping list</param>
-        /// <param name="Authorization">JWT: "bearer eyegfs"</param>
+        /// <param name="InventoryType">0:Freezer 1: Fridge 2: pantry 3: shopping list</param>
+        /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns></returns>
         [HttpGet("{InventoryType}")]
         public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int InventoryType,[FromHeader] string Authorization)
@@ -92,8 +92,6 @@ namespace ASPwebApp.Controllers
                 case InventoryTypes.Pantry:
                     return typeof(Pantry);
                 case InventoryTypes.ShoppingList:
-                    return typeof(ShoppingList);
-                case InventoryTypes.All:
                     return typeof(ShoppingList);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(InventoryType), InventoryType, null);
