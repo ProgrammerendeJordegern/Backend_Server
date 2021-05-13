@@ -55,7 +55,7 @@ namespace BackendUnitTest
             }
         }
         [Test]
-        public async Task CreateWExistingItem_II_already_Created_tody_originalIsIncemted()
+        public async Task CreateWExistingItem_IIalreadyCreatedToday_OriginalIsIncemted()
         {
             
             try
@@ -66,11 +66,11 @@ namespace BackendUnitTest
                     Amount = 3,
                     ItemId = 2
                 };
-                var result = await uut.CreateWExistingItem(null, 2, ii, "Bearer " + jwt); 
-                result = await uut.CreateWExistingItem(null, 2, ii, "Bearer " + jwt);
+                var result = await uut.CreateWExistingItem(null, 3, ii, "Bearer " + jwt); 
+                result = await uut.CreateWExistingItem(null, 3, ii, "Bearer " + jwt);
                 var result1 = await uut.Get(2, "Bearer " + jwt);
                 Assert.That(result1.Value.Count, Is.EqualTo(2));//Two II already exists with seed data
-                Assert.That(result1.Value[0].Amount,Is.EqualTo(8));
+                Assert.That(result1.Value[1].Amount,Is.EqualTo(10));
 
             }
             finally

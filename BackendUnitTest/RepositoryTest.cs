@@ -33,7 +33,7 @@ namespace BackendUnitTest
         {
             try
             {
-               // DataBase.Program.AddDummyData(new MyDbContext(new DbContextOptions<MyDbContext>()));
+                new SeedData(dbc);
                 Assert.That(dbc.PpUser.Count(), Is.EqualTo(2));
             }
             finally
@@ -79,11 +79,11 @@ namespace BackendUnitTest
         {
             try
             {
-               // DataBase.Program.AddDummyData(new MyDbContext(new DbContextOptions<MyDbContext>()));
+                new SeedData(dbc);
                 var user = uow.Users.Get(1);
                 var inventories = uow.Users.GetInventoriesWithUser(user.PpUserId);
                 var fridge = inventories.Single(i => i is Fridge);
-                Assert.That(fridge.ItemCollection.Count, Is.EqualTo(3));
+                Assert.That(fridge.ItemCollection.Count, Is.EqualTo(4));
             }
             finally
             {
