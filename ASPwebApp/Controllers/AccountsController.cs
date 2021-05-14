@@ -39,6 +39,7 @@ namespace ASPwebApp.Controllers
         [HttpPost("register"), AllowAnonymous]
         public async Task<ActionResult<UserDto>> Register(UserDto regUser)
         {
+            _context.Database.EnsureCreated();
             regUser.Email = regUser.Email.ToLower();
             var emailExists = await _context.User.Where(u =>
                 u.Email == regUser.Email).FirstOrDefaultAsync();
