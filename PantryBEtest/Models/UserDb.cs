@@ -11,7 +11,7 @@ namespace DataBase.Models
     {
         public UserDb()
         {
-            PpUser = new PpUser();
+            PpUser = new PpUser(2);
             CreationDate=DateTime.Now;
         }
         public UserDb(string fn, string email)
