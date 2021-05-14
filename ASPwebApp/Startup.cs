@@ -73,7 +73,7 @@ namespace ASPwebApp
             });
 
             services.AddDbContext<MyDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MYSQLCONNSTR_localdb")));
+                options.UseSqlServer(Configuration.GetConnectionString("ServerConnection")));
             //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 
