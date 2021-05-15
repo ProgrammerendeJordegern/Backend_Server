@@ -85,7 +85,7 @@ namespace ASPwebApp.Controllers
         public async Task<ActionResult> Edit([FromBody] InventoryItem inventoryItemFromClient)
         {
             if (inventoryItemFromClient == null) return BadRequest();
-            if (inventoryItemFromClient.ItemId == null)
+            if (inventoryItemFromClient.ItemId == null || inventoryItemFromClient.ItemId == 0)
                 inventoryItemFromClient.ItemId = inventoryItemFromClient.Item.ItemId;
             InventoryItem inventoryItemFromDb = await _context.InventoryItem
                 .Where(i => i.InventoryId == inventoryItemFromClient.InventoryId)
