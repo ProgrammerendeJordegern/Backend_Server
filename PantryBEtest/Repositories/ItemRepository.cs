@@ -29,7 +29,7 @@ namespace DataBase.Repositories
 
         public async Task<Item> GetItemWithEan(string ean)
         {
-           return await PlutoContext.Item.SingleOrDefaultAsync(i=>i.Ean==ean);
+           return await PlutoContext.Item.FirstOrDefaultAsync(i=>i.Ean==ean);
         }
     }
 }

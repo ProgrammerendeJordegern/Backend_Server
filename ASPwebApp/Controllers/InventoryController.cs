@@ -16,12 +16,12 @@ namespace ASPwebApp.Controllers
     [Route("api/Inventory")]
     [ApiController]
     [Authorize]
-    public class Inventory2Controller : ControllerBase
+    public class InventoryController : ControllerBase
     {
         private readonly MyDbContext _context;
         private UnitOfWork uow;
 
-        public Inventory2Controller(MyDbContext context)
+        public InventoryController(MyDbContext context)
         {
             _context = context;
             uow = new UnitOfWork(_context);

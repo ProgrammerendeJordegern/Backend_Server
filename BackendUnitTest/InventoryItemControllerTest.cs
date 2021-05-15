@@ -15,16 +15,19 @@ namespace BackendUnitTest
     public class InventoryItemControllerTest
     {
         private MyDbContext dbc;
-        private InventoryItem2Controller uut;
+        private InventoryItemController uut;
         private string jwt="test";
         [SetUp]
 
-        public void Setup()
+        public async Task Setup()
         {
             dbc = new MyDbContext(new DbContextOptions<MyDbContext>());
-            uut = new InventoryItem2Controller(dbc);
+            uut = new InventoryItemController(dbc);
+            await dbc.Database.EnsureDeletedAsync();
+
             dbc.Database.EnsureCreated();
             new SeedData(dbc);
+            //login:
             var user=dbc.User.First();
             user.AccessJWTToken = jwt;
             dbc.SaveChanges();
@@ -50,7 +53,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                await dbc.Database.EnsureDeletedAsync();
                 await dbc.DisposeAsync();
             }
         }
@@ -75,7 +77,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -94,7 +95,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -118,7 +118,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }

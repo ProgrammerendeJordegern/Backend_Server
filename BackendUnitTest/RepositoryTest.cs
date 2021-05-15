@@ -20,6 +20,8 @@ namespace BackendUnitTest
         {
             dbc = new MyDbContext(new DbContextOptions<MyDbContext>());
             uow = new UnitOfWork(dbc);
+            dbc.Database.EnsureDeleted();
+
             dbc.Database.EnsureCreated();
         }
 
@@ -38,7 +40,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -55,7 +56,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -70,7 +70,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -87,7 +86,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
