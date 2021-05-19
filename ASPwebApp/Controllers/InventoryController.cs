@@ -77,8 +77,12 @@ namespace ASPwebApp.Controllers
             }
             return listII;
         }
-
-        private static Type FromEnumToType(int? InventoryType)
+        /// <summary>
+        /// Convert number (enum) from UI to Inventory type
+        /// </summary>
+        /// <param name="InventoryType">int 0-4</param>
+        /// <returns>typeOf(eg. Fridge</returns>
+        public static Type FromEnumToType(int? InventoryType)
         {
             switch ((InventoryTypes)InventoryType)
             {
