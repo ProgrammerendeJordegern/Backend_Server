@@ -141,23 +141,19 @@ namespace DataBase.Data
             var i1 = new Item()
             {
                 Name = "Smør",
-                InventoryCollection = new List<InventoryItem>(),
                 Ean = "123123"
             };
             var i2 = new Item()
             {
                 Name = "Mælk",
-                InventoryCollection = new List<InventoryItem>()
             };
             var i3 = new Item()
             {
-                Name = "Æg",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Æg"
             };
             var i4 = new Item()
             {
-                Name = "Agurk",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Agurk"
             };
 
             context.Add(i1);
@@ -183,23 +179,19 @@ namespace DataBase.Data
             var i1 = new Item()
             {
                 Name = "Is",
-                InventoryCollection = new List<InventoryItem>(),
                 Ean = "321321"
             };
             var i2 = new Item()
             {
-                Name = "Rundstykker",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Rundstykker"
             };
             var i3 = new Item()
             {
-                Name = "Kylling",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Kylling"
             };
             var i4 = new Item()
             {
-                Name = "Hakket Spinat",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Hakket Spinat"
             };
 
             context.Add(i1);
@@ -225,23 +217,19 @@ namespace DataBase.Data
             var i1 = new Item()
             {
                 Name = "Toiletpapir",
-                InventoryCollection = new List<InventoryItem>(),
                 Ean = "321123"
             };
             var i2 = new Item()
             {
-                Name = "Tandpasta",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Tandpasta"
             };
             var i3 = new Item()
             {
-                Name = "Køkkenrulle",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Køkkenrulle"
             };
             var i4 = new Item()
             {
-                Name = "Husholdningsfilm",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Husholdningsfilm"
             };
 
             context.Add(i1);
@@ -267,23 +255,19 @@ namespace DataBase.Data
             var i1 = new Item()
             {
                 Name = "Mel",
-                InventoryCollection = new List<InventoryItem>(),
                 Ean = "123123"
             };
             var i2 = new Item()
             {
-                Name = "Mælk",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Mælk"
             };
             var i3 = new Item()
             {
-                Name = "Tomater",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Tomater"
             };
             var i4 = new Item()
             {
-                Name = "Vanilje is",
-                InventoryCollection = new List<InventoryItem>()
+                Name = "Vanilje is"
             };
 
             context.Add(i1);

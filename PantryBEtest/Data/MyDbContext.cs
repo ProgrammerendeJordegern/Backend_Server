@@ -34,10 +34,10 @@ namespace DataBase.Data
             //Many to many Inventory - Item
             modelBuilder.Entity<InventoryItem>()
                 .HasKey(ii => new {ii.InventoryId, ii.ItemId,ii.DateAdded});
-            modelBuilder.Entity<InventoryItem>()
-                .HasOne(ii => ii.Item)
-                .WithMany(i => i.InventoryCollection)
-                .HasForeignKey(ii => ii.ItemId);
+            //modelBuilder.Entity<InventoryItem>()
+            //    .HasOne(ii => ii.Item)
+            //    .WithMany(i => i.InventoryCollection)
+            //    .HasForeignKey(ii => ii.ItemId);
             modelBuilder.Entity<InventoryItem>()
                 .HasOne(ii => ii.Inventory)
                 .WithMany(i => i.ItemCollection)
