@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using ASPwebApp.Controllers;
 using NUnit.Framework;
@@ -8,7 +6,6 @@ using DataBase;
 using DataBase.Data;
 using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace BackendUnitTest
 {

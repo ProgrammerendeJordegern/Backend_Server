@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using System.Net.Mail;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using DataBase;

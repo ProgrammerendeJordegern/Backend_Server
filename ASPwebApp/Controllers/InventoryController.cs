@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DataBase;
 using DataBase.Data;
 using DataBase.Models;
@@ -81,7 +78,7 @@ namespace ASPwebApp.Controllers
             return listII;
         }
 
-        public static Type FromEnumToType(int? InventoryType)
+        private static Type FromEnumToType(int? InventoryType)
         {
             switch ((InventoryTypes)InventoryType)
             {
@@ -118,9 +115,5 @@ namespace ASPwebApp.Controllers
             return Ok("Elementerne er slettet");
         }
 
-        private bool InventoryExists(int id)
-        {
-            return _context.Inventory.Any(e => e.InventoryId == id);
-        }
     }
 }

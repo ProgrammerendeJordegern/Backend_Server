@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using DataBase;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataBase.Data;
@@ -76,6 +75,7 @@ namespace ASPwebApp.Controllers
                     throw new Exception("Wrong inventory type chosen");
             }
         }
+
         /// <summary>
         /// Edit Amount in Inventory Item
         /// </summary>
@@ -211,11 +211,7 @@ namespace ASPwebApp.Controllers
             return Accepted();
         }
 
-        private bool InventoryItemExists(int id)
-        {
-            return _context.InventoryItem.Any(e => e.InventoryId == id);
-        }
-        public static Type FromEnumToType(int? InventoryType)
+        private static Type FromEnumToType(int? InventoryType)
         {
             switch ((InventoryTypes)InventoryType)
             {
