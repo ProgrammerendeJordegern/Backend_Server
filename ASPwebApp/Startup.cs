@@ -18,6 +18,7 @@ using ASPwebApp.Data;
 using DataBase.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.AzureAppServices;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ASPwebApp
@@ -36,6 +37,17 @@ namespace ASPwebApp
         {
             services.AddMvc();
             services.AddControllers();
+            services.Configure<AzureFileLoggerOptions>(options =>
+
+            {
+
+                options.FileName = "azure - diagnostics -";
+
+                options.FileSizeLimit = 50 * 1024;
+
+                options.RetainedFileCountLimit = 5;
+
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ASPwebApp", Version = "v1" });
@@ -73,7 +85,8 @@ namespace ASPwebApp
             });
 
             services.AddDbContext<MyDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("ServerConnection")));
 
 
             var appSettingsSection = Configuration.GetSection("AppSettings");

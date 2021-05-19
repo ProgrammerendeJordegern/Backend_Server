@@ -13,6 +13,7 @@ using DataBase.Data;
 using DataBase.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using static BCrypt.Net.BCrypt;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -29,17 +30,21 @@ namespace ASPwebApp.Controllers
         private readonly MyDbContext _context;
         private readonly AppSettings _appSettings;
         private const int BcryptWorkFactor = 10;
-        
-        public AccountsController(MyDbContext context, IOptions<AppSettings> appSettings)
+        private readonly ILogger<AccountsController> _logger;
+
+        public AccountsController(MyDbContext context, IOptions<AppSettings> appSettings, ILogger<AccountsController> logger)
         {
             _context = context;
+            _logger = logger;
             _appSettings = appSettings.Value;
         }
 
         [HttpPost("register"), AllowAnonymous]
         public async Task<ActionResult<UserDto>> Register(UserDto regUser)
         {
-            _context.Database.EnsureCreated();
+            _logger.LogInformation("Register called with email"+ regUser.Email);
+            _context.Database.Migrate();
+            _logger.LogInformation("Database.Migrate() ran ");
             regUser.Email = regUser.Email.ToLower();
             var emailExists = await _context.User.Where(u =>
                 u.Email == regUser.Email).FirstOrDefaultAsync();
@@ -53,8 +58,11 @@ namespace ASPwebApp.Controllers
                 CreationDate = DateTime.Today
             };
             user.PwHash = HashPassword(regUser.Password, BcryptWorkFactor);
+            _logger.LogInformation("Adding new user to DB");
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Just added new user " + regUser.Email);
+
             return CreatedAtAction("Get", new { id = user.UserId }, regUser);
 
         }
@@ -75,6 +83,7 @@ namespace ASPwebApp.Controllers
         [HttpPost("login"), AllowAnonymous]
         public async Task<ActionResult<UserDto>> Login(UserDto login)
         {
+            _logger.LogInformation("Login from "+ login.Email);
             login.Email = login.Email.ToLower();
             var user = await _context.User.Where(u =>
                 u.Email == login.Email).FirstOrDefaultAsync();
@@ -93,6 +102,7 @@ namespace ASPwebApp.Controllers
                     return login;
                 }
             }
+            _logger.LogInformation("user not found: " + login.Email);
             ModelState.AddModelError(string.Empty, "Wrong username or password");
             return BadRequest(ModelState);
         }

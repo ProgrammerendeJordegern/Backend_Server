@@ -25,11 +25,12 @@ namespace ASPwebApp.Controllers
             _context = context;
             uow = new UnitOfWork(_context);
         }
-       
+
         /// <summary>
         /// get all InventoryItems containing this itemId
         /// </summary>
         /// <param name="itemId"></param>
+        /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns></returns>
         // GET: InventoryItem/get?
         [HttpGet("{ItemId}")]

@@ -22,6 +22,16 @@ namespace ASPwebApp
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureLogging(options =>
+
+                {
+
+                    options.ClearProviders();
+
+                    options.AddConsole();
+
+                    options.AddAzureWebAppDiagnostics();
+
                 });
     }
 }
