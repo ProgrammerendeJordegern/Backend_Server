@@ -12,13 +12,15 @@ namespace DataBase.Data
         private readonly string _connectionString;
         public MyDbContext()
         {
-            _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            // _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            _connectionString = @"Server=tcp:i4dab.database.windows.net,1433;Initial Catalog=pantrypassion-auecei4prj4gr3;Persist Security Info=False;User ID=pantrypassionauecei4prj4gr3;Password=pantrypassion-auecei4prj4gr3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         }
 
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
-            _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+           // _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            _connectionString = @"Server=tcp:i4dab.database.windows.net,1433;Initial Catalog=pantrypassion-auecei4prj4gr3;Persist Security Info=False;User ID=pantrypassionauecei4prj4gr3;Password=pantrypassion-auecei4prj4gr3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         }
 

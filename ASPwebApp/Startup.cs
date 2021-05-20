@@ -117,17 +117,19 @@ namespace ASPwebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,MyDbContext context)
         {
             if (env.IsDevelopment())
             {
+               
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ASPwebApp v1"));
 
                 
             }
-
+            //Ensure database is up to date:
+            context.Database.Migrate();
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -144,6 +146,7 @@ namespace ASPwebApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            
 
         }
     }
