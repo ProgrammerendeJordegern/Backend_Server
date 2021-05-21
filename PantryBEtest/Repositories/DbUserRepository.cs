@@ -20,11 +20,6 @@ namespace DataBase.Repositories
             
         }
 
-        public MyDbContext PlutoContext
-        {
-            get { return Context as MyDbContext; }
-        }
-
 
         public async Task<int> GetPpUserIdByJWT(string authorization)
         {

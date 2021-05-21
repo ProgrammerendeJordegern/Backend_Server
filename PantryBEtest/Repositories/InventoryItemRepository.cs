@@ -11,7 +11,7 @@ namespace DataBase.Repositories
     {
         public InventoryItem Get(int itemId, DateTime date, int[] inventoryItemIds);
         public Task<bool> Delete(int itemId, DateTime date,int[] inventoryItemIds);
-        Task<InventoryItem> TryGetTodayIinventoryItem(int inventoryInventoryId, int itemItemId);
+        public Task<InventoryItem> TryGetTodayIinventoryItem(int inventoryInventoryId, int itemItemId);
     }
 
 
