@@ -1,5 +1,6 @@
 ﻿using System;
 using DataBase.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataBase
 {
