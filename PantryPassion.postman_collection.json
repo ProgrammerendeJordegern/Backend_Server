@@ -166,8 +166,8 @@
 							"});\r",
 							"\r",
 							"\r",
-							"pm.test(\"Response time is less than 500ms\", function () {\r",
-							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"pm.test(\"Response time is less than 600ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
 							"});\r",
 							"\r",
 							""
@@ -180,12 +180,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/api/item",
+					"raw": "{{baseURL}}/item",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"api",
 						"item"
 					]
 				}
@@ -771,7 +770,8 @@
 		},
 		{
 			"key": "baseURL",
-			"value": "https://localhost:44380/api"
+			"value": "https://localhost:44380/api",
+			"disabled": true
 		},
 		{
 			"key": "onlineURL",
@@ -780,6 +780,10 @@
 		{
 			"key": "localURL",
 			"value": "https://localhost:44380/api"
+		},
+		{
+			"key": "baseURL",
+			"value": "https://pantrypassion.ga/api"
 		}
 	]
 }
