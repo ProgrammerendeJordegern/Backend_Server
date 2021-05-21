@@ -24,6 +24,15 @@ namespace DataBase.Models
             Item = ii.Item;
             Amount = ii.Amount;
             DateAdded = ii.DateAdded;
+            if (ii.Inventory != null) InventoryType = ConvertTypeToEnum(ii.Inventory.GetType());
+        }
+        private InventoryTypes ConvertTypeToEnum(Type t)
+        {
+            if (typeof(Freezer) == t) return InventoryTypes.Freezer;
+            if (typeof(Fridge) == t) return InventoryTypes.Fridge;
+            if (typeof(Pantry) == t) return InventoryTypes.Pantry;
+            if (typeof(ShoppingList) == t) return InventoryTypes.ShoppingList;
+            throw new Exception("Wrong inventory type chosen");
         }
 
         public int InventoryId { get; set; }
