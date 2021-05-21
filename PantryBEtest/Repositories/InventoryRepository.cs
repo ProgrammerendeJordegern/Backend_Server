@@ -14,11 +14,6 @@ namespace DataBase.Repositories
         {
         }
 
-        public MyDbContext PlutoContext
-        {
-            get { return Context as MyDbContext; }
-        }
-
         
     }
 }

@@ -105,13 +105,6 @@ namespace ASPwebApp.Controllers
             return simpleItem;
         }
 
-        //[HttpGet]
-        //public async Task<List<SimpleItem>> GetAllItems()
-        //{
-
-
-        //}
-
         /// <summary>
         /// Edit details about item
         /// </summary>

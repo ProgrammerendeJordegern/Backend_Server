@@ -10,7 +10,7 @@ namespace DataBase.Repositories
     {
         public ICollection<Inventory> GetInventoriesWithUser(int id);
         public Inventory GetInventoryWithUser(int id, Type type);
-        //public PpUser GetUserWithEmail(string email);
+        
     }
 
 
@@ -55,11 +55,5 @@ namespace DataBase.Repositories
             return inventory;
         }
 
-        //public PpUser GetUserWithEmail(string email)
-        //{
-        //    PpUser user = PlutoContext.PpUser
-        //        .SingleOrDefault(u => u.Email.Equals(email));
-        //    return user;
-        //}
     }
 }

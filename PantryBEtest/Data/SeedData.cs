@@ -54,8 +54,6 @@ namespace DataBase.Data
             }
 
             context.SaveChanges();
-            //                context.InventoryItem.Add(new InventoryItem(){Amount = 2,DateAdded = DateTime.Now});
-
 
             #endregion
 
