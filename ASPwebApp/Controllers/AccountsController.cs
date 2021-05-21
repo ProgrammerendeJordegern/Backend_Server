@@ -52,7 +52,7 @@ namespace ASPwebApp.Controllers
             {
                 FullName = regUser.FullName,
                 Email = regUser.Email,
-                PpUser = new PpUser(2),
+                PpUser = new PpUser(),
                 CreationDate = DateTime.Today
             };
             user.PwHash = HashPassword(regUser.Password, BcryptWorkFactor);
