@@ -77,10 +77,9 @@ namespace ASPwebApp
 
 
             });
-
             services.AddDbContext<MyDbContext>(options =>
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            options.UseSqlServer(Configuration.GetConnectionString("ServerConnection")));
+               // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("ServerConnection")));// It is possible to change database connection here
 
 
             var appSettingsSection = Configuration.GetSection("AppSettings");

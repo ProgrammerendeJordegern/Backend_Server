@@ -18,7 +18,7 @@ namespace BackendUnitTest
 
         public async Task Setup()
         {
-            dbc = new MyDbContext(new DbContextOptions<MyDbContext>());
+            dbc = new MyDbContext(@"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             uut = new InventoryItemController(dbc);
             await dbc.Database.EnsureDeletedAsync();
 
