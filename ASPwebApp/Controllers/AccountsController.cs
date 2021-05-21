@@ -41,7 +41,7 @@ namespace ASPwebApp.Controllers
         public async Task<ActionResult<UserDto>> Register(UserDto regUser)
         {
             _logger.LogInformation("Register called with email"+ regUser.Email);
-            _context.Database.Migrate();
+           // _context.Database.Migrate();
             _logger.LogInformation("Database.Migrate() ran ");
             regUser.Email = regUser.Email.ToLower();
             var emailExists = await _context.User.Where(u =>
@@ -52,7 +52,7 @@ namespace ASPwebApp.Controllers
             {
                 FullName = regUser.FullName,
                 Email = regUser.Email,
-                PpUser = new PpUser(),
+                PpUser = new PpUser(2),
                 CreationDate = DateTime.Today
             };
             user.PwHash = HashPassword(regUser.Password, BcryptWorkFactor);

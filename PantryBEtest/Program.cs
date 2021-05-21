@@ -9,7 +9,7 @@ namespace DataBase
         {
             using (var context = new MyDbContext())
             {
-                context.Database.EnsureCreated();
+                context.Database.Migrate();
                 var s1=new SeedData(context);
             }
             //    Console.WriteLine("Welcome to Pantry Passion Backend Server.");
