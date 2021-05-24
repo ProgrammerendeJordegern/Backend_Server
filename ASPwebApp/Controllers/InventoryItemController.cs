@@ -111,7 +111,7 @@ namespace ASPwebApp.Controllers
         /// <returns></returns>
         [HttpPost("existingItem/{userId}/{type}")]
         [HttpPost("existingItem/{type}")]
-        public async Task<ActionResult> CreateWExistingItem(int? userId, [Required]int? type, [FromBody] SimpleInventoryItem? inventoryItem,[FromHeader]string Authorization)
+        public async Task<ActionResult> CreateWExistingItem(int? userId, int? type, [FromBody] SimpleInventoryItem? inventoryItem,[FromHeader]string Authorization)
         {
             if (inventoryItem == null) return NoContent();
             Inventory inventory;

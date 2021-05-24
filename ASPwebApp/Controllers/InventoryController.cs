@@ -58,8 +58,17 @@ namespace ASPwebApp.Controllers
         public async Task<ActionResult<List<SimpleInventoryItem>>> Inventory(int InventoryType,[FromHeader] string Authorization)
         {
             int userId =await uow.UserDb.GetPpUserIdByJWT(Authorization);
+            Type convertedInventoryType;
+            try
+            {
+                convertedInventoryType = FromEnumToType(InventoryType);
 
-            Type convertedInventoryType = FromEnumToType(InventoryType);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e);
+                return BadRequest("Forkert Type");
+            }
             
 
             var inventory = uow.Users.GetInventoryWithUser((int)userId, convertedInventoryType);
