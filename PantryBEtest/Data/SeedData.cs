@@ -142,14 +142,17 @@ namespace DataBase.Data
             var i2 = new Item()
             {
                 Name = "Mælk",
+                Ean = "111"
             };
             var i3 = new Item()
             {
-                Name = "Æg"
+                Name = "Æg",
+                Ean = "222"
             };
             var i4 = new Item()
             {
-                Name = "Agurk"
+                Name = "Agurk",
+                Ean = "333"
             };
 
             context.Add(i1);
@@ -179,15 +182,18 @@ namespace DataBase.Data
             };
             var i2 = new Item()
             {
-                Name = "Rundstykker"
+                Name = "Rundstykker",
+                Ean = "444"
             };
             var i3 = new Item()
             {
-                Name = "Kylling"
+                Name = "Kylling",
+                Ean = "555"
             };
             var i4 = new Item()
             {
-                Name = "Hakket Spinat"
+                Name = "Hakket Spinat",
+                Ean = "666"
             };
 
             context.Add(i1);
@@ -217,15 +223,18 @@ namespace DataBase.Data
             };
             var i2 = new Item()
             {
-                Name = "Tandpasta"
+                Name = "Tandpasta",
+                Ean = "777"
             };
             var i3 = new Item()
             {
-                Name = "Køkkenrulle"
+                Name = "Køkkenrulle",
+                Ean = "888"
             };
             var i4 = new Item()
             {
-                Name = "Husholdningsfilm"
+                Name = "Husholdningsfilm",
+                Ean = "888"
             };
 
             context.Add(i1);
@@ -251,19 +260,22 @@ namespace DataBase.Data
             var i1 = new Item()
             {
                 Name = "Mel",
-                Ean = "123123"
+                Ean = "1111"
             };
             var i2 = new Item()
             {
-                Name = "Mælk"
+                Name = "Mælk",
+                Ean = "2222"
             };
             var i3 = new Item()
             {
-                Name = "Tomater"
+                Name = "Tomater",
+                Ean = "3333"
             };
             var i4 = new Item()
             {
-                Name = "Vanilje is"
+                Name = "Vanilje is",
+                Ean = "4444"
             };
 
             context.Add(i1);

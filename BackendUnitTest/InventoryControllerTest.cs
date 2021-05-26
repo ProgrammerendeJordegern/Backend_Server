@@ -61,24 +61,22 @@ namespace BackendUnitTest
        [TestCase(1, typeof(Fridge))]
        [TestCase(2, typeof(Pantry))]
        [TestCase(3, typeof(ShoppingList))]
-
-        public async Task FromEnumToType_MultipleInput_ReturnIsCorrect(int input,Type expectedType)
+       public async Task FromEnumToType_MultipleInput_ReturnIsCorrect(int input,Type expectedType)
         {
             var result = InventoryController.FromEnumToType(input);
             Assert.That(result, Is.EqualTo(expectedType));
         }
 
         [TestCase(-1)]
-        [TestCase(5)]
+        [TestCase(4)]
         [TestCase(100)]
-
         public async Task FromEnumToType_WrongInput_ErrorIsTrown(int input)
         {
             Assert.Throws<ArgumentOutOfRangeException>( () => InventoryController.FromEnumToType(input));
 
         }
-        [TestCase(100)]
 
+        [TestCase(100)]
         public async Task DeleteAllContentInAnInventory_DataIsSeeded_ListIsEmpty(int input)
         {
             await uut.DeleteAllContentInAnInventory(0, authorization);
