@@ -1,6 +1,14 @@
 ﻿using System;
 using DataBase.Repositories;
 
+/*
+Note from PantryPassion: This is based on Repository Example handed out by Jesper Tørresø (JRT) 
+        JRT = Lecturer at Institute of Electrical- and Computer engineering (Aarhus University).
+*/
+
+
+
+
 namespace DataBase.Data
 {
     public interface IUnitOfWork : IDisposable

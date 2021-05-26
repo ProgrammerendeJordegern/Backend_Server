@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using DataBase.Data;
-using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase
@@ -13,7 +10,7 @@ namespace DataBase
         {
             using (var context = new MyDbContext())
             {
-                context.Database.EnsureCreated();
+                context.Database.Migrate();
                 var s1=new SeedData(context);
             }
             //    Console.WriteLine("Welcome to Pantry Passion Backend Server.");

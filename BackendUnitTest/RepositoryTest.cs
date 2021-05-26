@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using System.Net.Mail;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using DataBase;
@@ -18,8 +16,10 @@ namespace BackendUnitTest
        
         public void Setup()
         {
-            dbc = new MyDbContext(new DbContextOptions<MyDbContext>());
+            dbc = new MyDbContext(@"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             uow = new UnitOfWork(dbc);
+            dbc.Database.EnsureDeleted();
+
             dbc.Database.EnsureCreated();
         }
 
@@ -38,7 +38,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -55,7 +54,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -70,7 +68,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -87,7 +84,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }

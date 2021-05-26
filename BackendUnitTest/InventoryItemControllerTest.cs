@@ -1,6 +1,4 @@
-using System;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using ASPwebApp.Controllers;
 using NUnit.Framework;
@@ -8,23 +6,25 @@ using DataBase;
 using DataBase.Data;
 using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 namespace BackendUnitTest
 {
     public class InventoryItemControllerTest
     {
         private MyDbContext dbc;
-        private InventoryItem2Controller uut;
+        private InventoryItemController uut;
         private string jwt="test";
         [SetUp]
 
-        public void Setup()
+        public async Task Setup()
         {
-            dbc = new MyDbContext(new DbContextOptions<MyDbContext>());
-            uut = new InventoryItem2Controller(dbc);
+            dbc = new MyDbContext(@"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            uut = new InventoryItemController(dbc);
+            await dbc.Database.EnsureDeletedAsync();
+
             dbc.Database.EnsureCreated();
             new SeedData(dbc);
+            //login:
             var user=dbc.User.First();
             user.AccessJWTToken = jwt;
             dbc.SaveChanges();
@@ -50,7 +50,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                await dbc.Database.EnsureDeletedAsync();
                 await dbc.DisposeAsync();
             }
         }
@@ -75,7 +74,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -94,7 +92,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }
@@ -118,7 +115,6 @@ namespace BackendUnitTest
             }
             finally
             {
-                dbc.Database.EnsureDeleted();
                 dbc.Dispose();
             }
         }

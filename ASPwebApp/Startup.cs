@@ -1,23 +1,18 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Reflection;
-using System.Threading.Tasks;
 using ASPwebApp.Data;
 using DataBase.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.AzureAppServices;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ASPwebApp
@@ -36,6 +31,17 @@ namespace ASPwebApp
         {
             services.AddMvc();
             services.AddControllers();
+            services.Configure<AzureFileLoggerOptions>(options =>
+
+            {
+
+                options.FileName = "azure - diagnostics -";
+
+                options.FileSizeLimit = 50 * 1024;
+
+                options.RetainedFileCountLimit = 5;
+
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ASPwebApp", Version = "v1" });
@@ -71,10 +77,9 @@ namespace ASPwebApp
 
 
             });
-
             services.AddDbContext<MyDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ServerConnection")));
-            //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+               // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("ServerConnection")));// It is possible to change database connection here
 
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -105,17 +110,19 @@ namespace ASPwebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,MyDbContext context)
         {
             if (env.IsDevelopment())
             {
+               
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ASPwebApp v1"));
 
                 
             }
-
+            //Ensure database is up to date:
+            context.Database.Migrate();
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -132,6 +139,7 @@ namespace ASPwebApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            
 
         }
     }

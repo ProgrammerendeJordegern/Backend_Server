@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using DataBase.Data;
 using DataBase.Models;
@@ -22,17 +20,12 @@ namespace DataBase.Repositories
             
         }
 
-        public MyDbContext PlutoContext
-        {
-            get { return Context as MyDbContext; }
-        }
-
 
         public async Task<int> GetPpUserIdByJWT(string authorization)
         {
             string jwt = authorization.Split(" ")[1];
-            var dbUser =await Context.User.Include(u => u.PpUser).SingleAsync(u => u.AccessJWTToken == jwt);
-           
+            var dbUser =await Context.User.Include(u => u.PpUser).SingleOrDefaultAsync(u => u.AccessJWTToken == jwt);
+            if (dbUser == null) return 0;
             return dbUser.PpUserId;
         }
 

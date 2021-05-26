@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DataBase.Data;
-using DataBase.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using DataBase.Data;
 
 namespace DataBase.Repositories
 {
@@ -17,11 +12,6 @@ namespace DataBase.Repositories
     {
         public InventoryRepository(MyDbContext context) : base(context)
         {
-        }
-
-        public MyDbContext PlutoContext
-        {
-            get { return Context as MyDbContext; }
         }
 
         

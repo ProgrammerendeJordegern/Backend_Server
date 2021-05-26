@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataBase.Data;
 using DataBase.Models;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataBase.Repositories
@@ -13,7 +11,7 @@ namespace DataBase.Repositories
     {
         public InventoryItem Get(int itemId, DateTime date, int[] inventoryItemIds);
         public Task<bool> Delete(int itemId, DateTime date,int[] inventoryItemIds);
-        Task<InventoryItem> TryGetTodayIinventoryItem(int inventoryInventoryId, int itemItemId);
+        public Task<InventoryItem> TryGetTodayIinventoryItem(int inventoryInventoryId, int itemItemId);
     }
 
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
 using DataBase.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -10,23 +8,33 @@ namespace DataBase.Data
     public class MyDbContext : DbContext
     {
         private readonly string _connectionString;
+
+        //Default constructor used by Database.Program
         public MyDbContext()
         {
-            _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            // _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            _connectionString = @"Server=tcp:i4dab.database.windows.net,1433;Initial Catalog=pantrypassion-auecei4prj4gr3;Persist Security Info=False;User ID=pantrypassionauecei4prj4gr3;Password=pantrypassion-auecei4prj4gr3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+        }
+        //Constructor with string parameter used by unit-test
+        public MyDbContext(string connectionString)
+        {
+            // _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            _connectionString = connectionString;
 
         }
 
+        //Constructor with options used in ASPwebApp
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
-            _connectionString = @"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.LogTo(Console.WriteLine, new[] { RelationalEventId.CommandExecuted })
                 .EnableSensitiveDataLogging();
-            optionsBuilder.UseSqlServer(_connectionString);
+            if (_connectionString != null && _connectionString.Length > 10) optionsBuilder.UseSqlServer(_connectionString);
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,10 +42,10 @@ namespace DataBase.Data
             //Many to many Inventory - Item
             modelBuilder.Entity<InventoryItem>()
                 .HasKey(ii => new {ii.InventoryId, ii.ItemId,ii.DateAdded});
-            modelBuilder.Entity<InventoryItem>()
-                .HasOne(ii => ii.Item)
-                .WithMany(i => i.InventoryCollection)
-                .HasForeignKey(ii => ii.ItemId);
+            //modelBuilder.Entity<InventoryItem>()
+            //    .HasOne(ii => ii.Item)
+            //    .WithMany(i => i.InventoryCollection)
+            //    .HasForeignKey(ii => ii.ItemId);
             modelBuilder.Entity<InventoryItem>()
                 .HasOne(ii => ii.Inventory)
                 .WithMany(i => i.ItemCollection)

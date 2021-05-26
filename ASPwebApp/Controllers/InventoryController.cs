@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using DataBase;
 using DataBase.Data;
 using DataBase.Models;
@@ -16,12 +13,12 @@ namespace ASPwebApp.Controllers
     [Route("api/Inventory")]
     [ApiController]
     [Authorize]
-    public class Inventory2Controller : ControllerBase
+    public class InventoryController : ControllerBase
     {
         private readonly MyDbContext _context;
         private UnitOfWork uow;
 
-        public Inventory2Controller(MyDbContext context)
+        public InventoryController(MyDbContext context)
         {
             _context = context;
             uow = new UnitOfWork(_context);
@@ -81,6 +78,11 @@ namespace ASPwebApp.Controllers
             return listII;
         }
 
+        /// <summary>
+        /// Convert number (enum) from UI to Inventory type
+        /// </summary>
+        /// <param name="InventoryType">int 0-4</param>
+        /// <returns>typeOf(eg. Fridge</returns>
         public static Type FromEnumToType(int? InventoryType)
         {
             switch ((InventoryTypes)InventoryType)
@@ -118,9 +120,5 @@ namespace ASPwebApp.Controllers
             return Ok("Elementerne er slettet");
         }
 
-        private bool InventoryExists(int id)
-        {
-            return _context.Inventory.Any(e => e.InventoryId == id);
-        }
     }
 }
