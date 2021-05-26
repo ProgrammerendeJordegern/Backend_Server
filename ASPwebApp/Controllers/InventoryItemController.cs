@@ -31,14 +31,14 @@ namespace ASPwebApp.Controllers
         /// <param name="itemId"></param>
         /// <param name="Authorization">JWT token form header "Bearer 32hg4"</param>
         /// <returns></returns>
-        // GET: InventoryItem/get?
-        [HttpGet("{ItemId}")]
-        public async Task<ActionResult<List<SimpleInventoryItem>>> Get(int? itemId,[FromHeader] string Authorization)
+        [HttpGet("{itemId}")]
+        [HttpGet]
+        public async Task<ActionResult<List<SimpleInventoryItem>>> Get(int itemId,[FromHeader] string Authorization)
         {
             var ids=await uow.UserDb.GetInventoryIdsByJwt(Authorization);
             if (itemId == null) return BadRequest();
             if (_context.InventoryItem.Any(ii => ii.ItemId == itemId) == false) return NotFound();
-            var inIts = new List<InventoryItem>();
+            var inIts = new List<SimpleInventoryItem>();
             foreach (var id in ids)
             {
                 var inIt= await _context.InventoryItem
@@ -46,36 +46,26 @@ namespace ASPwebApp.Controllers
                     .Include(ii => ii.Inventory)
                     .Where(ii => ii.ItemId == itemId)
                     .Where(ii => ii.InventoryId ==id).FirstOrDefaultAsync();
-                if(inIt!=null)inIts.Add(inIt);
+                if (inIt != null)
+                {
+                    var simpleInventoryItem = new SimpleInventoryItem(inIt);
+                    //simpleInventoryItem.InventoryType=ConvertTypeToEnum(inIt.Inventory.GetType());
+                    inIts.Add(simpleInventoryItem);
+                }
             }
             
             if (inIts == null) return NotFound();
             //Copy content into simple class (JSON converter complains about too many references)
-            List<SimpleInventoryItem> simpleList = new List<SimpleInventoryItem>();
-            foreach (var ii in inIts)
-            {
-                simpleList.Add(new SimpleInventoryItem(ii) { InventoryType = ConvertTypeToEnum(ii.Inventory) });
+            //List<SimpleInventoryItem> simpleList = new List<SimpleInventoryItem>();
+            //foreach (var ii in inIts)
+            //{
+            //    simpleList.Add(new SimpleInventoryItem(ii) { InventoryType = ConvertTypeToEnum(ii.Inventory) });
 
-            }
-            return simpleList;
+            //}
+            return inIts;
         }
 
-        private InventoryTypes ConvertTypeToEnum(Inventory inventory)
-        {
-            switch (inventory)
-            {
-                case Freezer freezer:
-                    return InventoryTypes.Freezer;
-                case Fridge fridge:
-                    return InventoryTypes.Fridge;
-                case Pantry pantry:
-                    return InventoryTypes.Pantry;
-                case ShoppingList shoppingList:
-                    return InventoryTypes.ShoppingList;
-                default:
-                    throw new Exception("Wrong inventory type chosen");
-            }
-        }
+        
 
         /// <summary>
         /// Edit Amount in Inventory Item
