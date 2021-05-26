@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using DataBase.Data;
+//Primary author: Jesper Tørresø 
+
 
 namespace DataBase.Repositories
 {

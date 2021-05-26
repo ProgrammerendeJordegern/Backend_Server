@@ -3,6 +3,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using ASPwebApp.Data;
@@ -16,6 +17,10 @@ using static BCrypt.Net.BCrypt;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+
+//Inspired by "Hvordan du tilføjer bruger login til et web API.pdf" by Poul Ejnar Rovsing
+//https://blackboard.au.dk/bbcswebdav/pid-2926757-dt-content-rid-10222299_1/courses/BB-Cou-UUVA-94499/2.modul/12%20Security/Hvordan%20du%20tilf%C3%B8jer%20bruger%20login%20til%20et%20web%20API.pdf
+
 
 namespace ASPwebApp.Controllers
 {
@@ -94,7 +99,7 @@ namespace ASPwebApp.Controllers
                     var token = new TokenDto(); 
                     token.JWT = GenerateToken(user);
                     login.AccessJWTToken = token.JWT;
-                    user.AccessJWTToken = token.JWT;
+                    user.AccessJWTToken = HashPassword(token.JWT, BcryptWorkFactor);
                     await _context.SaveChangesAsync();
                     login.FullName = user.FullName;
                     return login;
@@ -107,7 +112,6 @@ namespace ASPwebApp.Controllers
 
 
         //Logout
-
         [HttpPost("logout"), Authorize]
         public async Task<OkObjectResult> Logout([FromHeader] string Authorization)
         {
