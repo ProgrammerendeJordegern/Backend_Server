@@ -17,6 +17,7 @@ using static BCrypt.Net.BCrypt;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
+using System.Security.Cryptography;
 
 //Inspired by "Hvordan du tilføjer bruger login til et web API.pdf" by Poul Ejnar Rovsing
 //https://blackboard.au.dk/bbcswebdav/pid-2926757-dt-content-rid-10222299_1/courses/BB-Cou-UUVA-94499/2.modul/12%20Security/Hvordan%20du%20tilf%C3%B8jer%20bruger%20login%20til%20et%20web%20API.pdf
@@ -60,7 +61,8 @@ namespace ASPwebApp.Controllers
                 PpUser = new PpUser(2),
                 CreationDate = DateTime.Today
             };
-            user.PwHash = HashPassword(regUser.Password, BcryptWorkFactor);
+            var salt= BCrypt.Net.BCrypt.GenerateSalt();
+            user.PwHash = HashPassword(regUser.Password, "DummySalt");
             _logger.LogInformation("Adding new user to DB");
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -99,7 +101,8 @@ namespace ASPwebApp.Controllers
                     var token = new TokenDto(); 
                     token.JWT = GenerateToken(user);
                     login.AccessJWTToken = token.JWT;
-                    user.AccessJWTToken = HashPassword(token.JWT, BcryptWorkFactor);
+                    var hash = HashJwt(token.JWT);
+                    user.AccessJWTToken = hash;
                     await _context.SaveChangesAsync();
                     login.FullName = user.FullName;
                     return login;
@@ -117,8 +120,11 @@ namespace ASPwebApp.Controllers
         {
             string[] authorizationJwt = Authorization.Split(" ");
             var JwtToken = authorizationJwt[1];
+            var JwtHash = HashJwt(JwtToken);
             var user = await _context.User.Where(u =>
-                u.AccessJWTToken == JwtToken).FirstOrDefaultAsync();
+                u.AccessJWTToken == JwtHash).FirstOrDefaultAsync();
+
+            if (user == null) return new OkObjectResult(NotFound("Vi kunne desværre ikke finde dit token i databasen. Vi er på sagen"));
             user.AccessJWTToken = null;
             await _context.SaveChangesAsync();
             return Ok("Logout completed");
@@ -143,6 +149,15 @@ namespace ASPwebApp.Controllers
                         SecurityAlgorithms.HmacSha256)), 
                 new JwtPayload(claims)); 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public static string HashJwt(string jwt)
+        {
+            string tempJwt = jwt + DateTime.Now.Date;
+            UTF8Encoding encoder = new UTF8Encoding();
+            byte[] bytearray = encoder.GetBytes(tempJwt);
+            var hash = new SHA384Managed().ComputeHash(bytearray);
+            return System.Text.Encoding.Default.GetString(hash);
         }
     }
 

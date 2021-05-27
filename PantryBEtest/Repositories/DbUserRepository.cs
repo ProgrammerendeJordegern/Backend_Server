@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using DataBase.Data;
 using DataBase.Models;
@@ -24,7 +27,8 @@ namespace DataBase.Repositories
         public async Task<int> GetPpUserIdByJWT(string authorization)
         {
             string jwt = authorization.Split(" ")[1];
-            var dbUser =await Context.User.Include(u => u.PpUser).SingleOrDefaultAsync(u => u.AccessJWTToken == jwt);
+            var hash = HashJwt(jwt);
+            var dbUser =await Context.User.Include(u => u.PpUser).SingleOrDefaultAsync(u => u.AccessJWTToken == hash);
             if (dbUser == null) return 0;
             return dbUser.PpUserId;
         }
@@ -45,6 +49,14 @@ namespace DataBase.Repositories
             }
 
             return ids;
+        }
+        public static string HashJwt(string jwt)
+        {
+            string tempJwt = jwt + DateTime.Now.Date;
+            UTF8Encoding encoder = new UTF8Encoding();
+            byte[] bytearray = encoder.GetBytes(tempJwt);
+            var hash = new SHA384Managed().ComputeHash(bytearray);
+            return System.Text.Encoding.Default.GetString(hash);
         }
     }
 }

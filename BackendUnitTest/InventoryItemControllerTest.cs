@@ -26,7 +26,7 @@ namespace BackendUnitTest
             new SeedData(dbc);
             //login:
             var user=dbc.User.First();
-            user.AccessJWTToken = jwt;
+            user.AccessJWTToken = AccountsController.HashJwt(jwt);
             dbc.SaveChanges();
         }
         [Test]
