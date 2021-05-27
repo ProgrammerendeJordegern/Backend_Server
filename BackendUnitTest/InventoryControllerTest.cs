@@ -47,8 +47,8 @@ namespace BackendUnitTest
 
            var response = await uut.Inventory(1,authorization);
            var items = response.Value;
-           Assert.That(items.Count, Is.GreaterThan(5));
-           Assert.That(items.First().InventoryType, Is.EqualTo(1));
+           Assert.That(items.Count, Is.GreaterThan(3));
+           Assert.That(items.First().InventoryType, Is.EqualTo(InventoryTypes.Fridge));
        }
        [Test]
        public async Task GetInvalidType_DataIsSeeded_ErrorReturned()
