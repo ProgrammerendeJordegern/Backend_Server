@@ -12,8 +12,7 @@ namespace BackendUnitTest
     {
         private UnitOfWork uow;
         private MyDbContext dbc;
-        [SetUp] 
-       
+        [SetUp]
         public void Setup()
         {
             dbc = new MyDbContext(@"Data Source=(localdb)\DABServer;Initial Catalog=PantryPassion;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
