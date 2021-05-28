@@ -48,7 +48,7 @@ namespace ASPwebApp.Controllers
         {
             _logger.LogInformation("Register called with email"+ regUser.Email);
            // _context.Database.Migrate();
-            _logger.LogInformation("Database.Migrate() ran ");
+           // _logger.LogInformation("Database.Migrate() ran ");
             regUser.Email = regUser.Email.ToLower();
             var emailExists = await _context.User.Where(u =>
                 u.Email == regUser.Email).FirstOrDefaultAsync();
@@ -62,11 +62,11 @@ namespace ASPwebApp.Controllers
                 CreationDate = DateTime.Today
             };
             var salt= BCrypt.Net.BCrypt.GenerateSalt();
-            user.PwHash = HashPassword(regUser.Password, "DummySalt");
-            _logger.LogInformation("Adding new user to DB");
+            user.PwHash = HashPassword(regUser.Password, BcryptWorkFactor);
+           // _logger.LogInformation("Adding new user to DB");
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Just added new user " + regUser.Email);
+            //_logger.LogInformation("Just added new user " + regUser.Email);
 
             return CreatedAtAction("Get", new { id = user.UserId }, regUser);
 
